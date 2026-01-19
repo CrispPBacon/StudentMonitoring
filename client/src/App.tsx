@@ -10,7 +10,7 @@ export default function App() {
   return (
     <>
       <Toaster />
-      <div className="2xl:container 2xl:mx-auto grid grid-cols-[14rem_1fr] gap-5 h-dvh w-full">
+      <div className="2xl:container 2xl:mx-auto grid grid-cols-[16rem_1fr] gap-5 h-dvh w-full">
         <Sidebar />
         <Routes>
           <Route path="/" element={<Dashboard />} />

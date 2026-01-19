@@ -1,13 +1,14 @@
 import { AccountBox, Dashboard, ExitToApp, School } from '@mui/icons-material';
 import { NavLink } from 'react-router-dom';
-
+import logo from "@/assets/logo.webp"
 
 export default function Sidebar() {
 
     return (
         <aside className="px-4">
             {/* <!-- Title --> */}
-            <span className="mt-10 mb-5 flex px-4">
+            <span className="mt-10 mb-5 flex flex-col px-4 items-center gap-3">
+                <img src={logo} alt="logo" className="w-20 h-20" />
                 <strong className="font-mono text-3xl">
                     CLOCK-<span className="text-purple-500">IN</span>
                 </strong>

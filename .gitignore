@@ -1,3 +1,5 @@
-tailwind.config.js
-index.html
+node_modules
 attendance_report.html
+login.html
+mockup.html
+tailwind.config.js

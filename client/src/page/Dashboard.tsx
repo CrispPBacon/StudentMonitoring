@@ -3,19 +3,19 @@ import { ImportExportRounded, PersonAddAltRounded, PersonOffRounded, ShowChartRo
 import Chart from "@/components/Chart"
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import React from "react"
+import React, { useState } from "react"
 
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog"
+import { DialogClose } from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input";
+import StudentTable from "@/components/StudentTable";
+import ButtonDialog from "@/components/ButtonDialog";
 
 export default function Dashboard() {
-
+    const [open, setOpen] = useState(false);
+    const addStudent = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        toast.success("Adding New Student...")
+    }
     return (
         // < !--Dashbaord -- >
         <main className="p-8 overflow-y-auto">
@@ -53,23 +53,53 @@ export default function Dashboard() {
                     className="mt-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
                 >
                     <ButtonDialog
+                        open={open}
+                        onOpenChange={setOpen}
                         className="hover:text-purple-300 hover:bg-slate-800 bg-slate-200 text-slate-800 font-medium py-5 px-4 sm:px-5 rounded-md flex items-center gap-3"
                         icon={PersonAddAltRounded}
                         placeholder="Add Student"
-                        title="Are you sure you want to do it?"
+                        title="Add New Student"
+                        description="Fill in the required details to create a new student record."
                     >
-                        <span className="gap-2 flex">
-                            <Button>Submit</Button>
-                            <Button variant={"outline"}>Cancel</Button>
-                        </span>
+                        <form onSubmit={addStudent}>
+                            <div className="flex gap-2">
+                                <Input placeholder="First Name" className="mb-2" />
+                                <Input placeholder="Last Name" className="mb-2" />
+                            </div>
+                            <Input placeholder="Student ID" className="mb-2" />
+                            <div className="flex gap-2 mb-2">
+                                <select name="course" id="course" className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm">
+                                    <option value="" disabled selected>Select Course</option>
+                                    <option value="bscs">BSCS</option>
+                                    <option value="bsit">BSIT</option>
+                                    <option value="bsed">BSED</option>
+                                    <option value="bsba">BSBA</option>
+                                </select>
+                                <Input placeholder="Year" type="number" />
+                            </div>
+                            {/* <Input placeholder="Course" type="" className="mb-6" /> */}
+                            <div className="mt-10 gap-2 flex justify-end w-full ">
+                                <DialogClose asChild>
+                                    <Button type="button" variant={"outline"} className="cursor-pointer">Cancel</Button>
+                                </DialogClose>
+                                <Button type="submit" className="px-15 cursor-pointer" >Submit</Button>
+                            </div>
+                        </form>
                     </ButtonDialog>
                     <ButtonDialog
                         className="hover:bg-slate-800 bg-slate-200 text-slate-800 hover:text-yellow-300 font-medium py-5 px-4 sm:px-5 rounded-md flex items-center gap-3"
                         icon={PersonOffRounded}
-                        placeholder="Suspend Student"
-                        title="Suspend Student"
+                        placeholder="Suspend ID"
+                        title="Suspend Student ID Card"
+                        description="The student will not be able to use this ID card until it is reactivated"
                     >
-                        Here
+                        <Input placeholder="Student ID" className="mb-5" />
+                        <div className="gap-3 flex justify-end w-full ">
+                            <DialogClose asChild>
+                                <Button type="button" variant={"outline"}>Cancel</Button>
+                            </DialogClose>
+                            <Button type="submit" className="px-15">Submit</Button>
+                        </div>
                     </ButtonDialog>
                     <button onClick={() => toast("View Report")}
                         className="hover:bg-slate-800 bg-slate-200 text-slate-800 hover:text-slate-50 font-medium py-5 px-4 sm:px-5 rounded-md flex items-center gap-3"
@@ -101,97 +131,4 @@ export default function Dashboard() {
 }
 
 
-interface ButtonProps {
-    children: React.ReactNode,
-    placeholder?: string,
-    icon?: React.ElementType,
-    className?: string,
-    title?: string
-}
-export function ButtonDialog({ children, placeholder, icon: Icon, className, title }: ButtonProps) {
-    return (
-        <Dialog>
-            <DialogTrigger className={className}>
-                {Icon && <Icon fontSize="small" />}
-                <span>{placeholder}</span>
-            </DialogTrigger>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>{title}</DialogTitle>
-                    <DialogDescription>
-                        {children}
-                    </DialogDescription>
-                </DialogHeader>
-            </DialogContent>
-        </Dialog>
-    )
-}
 
-export function StudentTable() {
-    return (
-        <div className="p-2">
-            {/* <!-- Filters --> */}
-            <strong>Recent Entry Logs</strong>
-            <div className="mb-4 mt-4 flex flex-wrap gap-2">
-                <button
-                    className="px-4 sm:px-5 py-2 rounded-full bg-slate-900 text-white text-sm shadow"
-                >
-                    Daily
-                </button>
-                <button
-                    className="px-4 sm:px-5 py-2 rounded-full bg-white text-slate-600 text-sm shadow-sm hover:bg-slate-50"
-                >
-                    Weekly
-                </button>
-                <button
-                    className="px-4 sm:px-5 py-2 rounded-full bg-white text-slate-600 text-sm shadow-sm hover:bg-slate-50"
-                >
-                    Monthly
-                </button>
-            </div>
-            {/* <!-- End of Filters --> */}
-
-            {/* <!-- Student Table List --> */}
-            <div className="grid grid-cols-4 text-sm">
-                {/* <!-- Header --> */}
-                <div className="font-bold p-2 text-slate-600 border-b-2">Student ID</div>
-                <div className="font-bold p-2 text-slate-600 border-b-2">
-                    Student Name
-                </div>
-                <div className="font-bold p-2 text-slate-600 border-b-2">Time In</div>
-                <div className="font-bold p-2 text-slate-600 border-b-2">Date</div>
-
-                {/* <!-- Row 1 --> */}
-                <div className="p-2">17-02919</div>
-                <div className="p-2">Allan Soriano</div>
-                <div className="p-2">07:30 AM</div>
-                <div className="p-2">January 12, 2026</div>
-
-                {/* <!-- Row --> */}
-                <div className="p-2">17-02919</div>
-                <div className="p-2">Allan Soriano</div>
-                <div className="p-2">07:30 AM</div>
-                <div className="p-2">January 12, 2026</div>
-
-                {/* <!-- Row --> */}
-                <div className="p-2">17-02919</div>
-                <div className="p-2">Allan Soriano</div>
-                <div className="p-2">07:30 AM</div>
-                <div className="p-2">January 12, 2026</div>
-
-                {/* <!-- Row --> */}
-                <div className="p-2">17-02919</div>
-                <div className="p-2">Allan Soriano</div>
-                <div className="p-2">07:30 AM</div>
-                <div className="p-2">January 12, 2026</div>
-
-                {/* <!-- Row --> */}
-                <div className="p-2">17-02919</div>
-                <div className="p-2">Allan Soriano</div>
-                <div className="p-2">07:30 AM</div>
-                <div className="p-2">January 12, 2026</div>
-            </div>
-            {/* <!-- End of Student Table List --> */}
-        </div>
-    )
-}

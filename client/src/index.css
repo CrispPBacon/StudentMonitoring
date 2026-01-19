@@ -143,5 +143,5 @@
 
 /* --- Modifier --- */
 nav ul .active {
-  @apply bg-slate-100 text-purple-500 border-red-300;
+  @apply bg-slate-100 text-purple-500 border-purple-400;
 }
