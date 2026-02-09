@@ -1,16 +1,21 @@
 import './config/environment.js';
 
 import express from 'express';
+import session from 'express-session';
+
 import router from './routes/index.js';
 import { errorHandlerMiddleware } from './middlewares/error-handler.js';
+import { connect } from './config/db.js';
+import { sessionConfig, sessionLog } from './config/session.js';
 
 const app = express();
 const PORT = process.env.PORT;
 const HOST = process.env.HOST;
 
-async function onServerStart() {
+function onServerStart() {
   console.log(`Server listening at http://${HOST}:${PORT}`);
   console.log(`Environment: ${process.env.NODE_ENV.toUpperCase()}`);
+  connect();
 }
 
 function startServer() {
@@ -21,6 +26,8 @@ function startServer() {
 app.use([
   express.json(),
   express.urlencoded({ extended: true }),
+  session(sessionConfig),
+  sessionLog,
   router,
   errorHandlerMiddleware,
 ]);
