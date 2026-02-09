@@ -1,6 +1,6 @@
 import { ImportExportRounded, PersonAddAltRounded, PersonOffRounded, ShowChartRounded } from "@mui/icons-material";
 
-import Chart from "@/components/Chart"
+import Chart from "@/components/layout/Chart"
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import React, { useState } from "react"
@@ -8,7 +8,7 @@ import React, { useState } from "react"
 import { DialogClose } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input";
 import StudentTable from "@/components/StudentTable";
-import ButtonDialog from "@/components/ButtonDialog";
+import ButtonDialog from "@/components/layout/ButtonDialog";
 
 export default function Dashboard() {
     const [open, setOpen] = useState(false);

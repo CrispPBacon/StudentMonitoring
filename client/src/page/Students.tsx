@@ -4,7 +4,7 @@ export default function Students() {
 
             {/* <!-- Title Page --> */}
             <div className="mb-6">
-                <h1 className="font-bold text-3xl">Students Logs</h1>
+                <h1 className="font-bold text-3xl">List of Students</h1>
             </div>
             {/* <!-- End of Title Page --> */}
         </main>
