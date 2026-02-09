@@ -25,6 +25,11 @@ const StudentSchema = new mongoose.Schema(
       trim: true,
       required: [true, 'Student ID is required'],
     },
+    card_id: {
+      type: String,
+      uppercase: true,
+      trim: true,
+    },
     education: {
       category: {
         type: String,
