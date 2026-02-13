@@ -1,7 +1,7 @@
 import { addUser, login } from '../services/auth.service.js';
 import { BadRequestError, NotFoundError } from '../utils/errors.js';
 
-export async function authLogin(req, res, next) {
+export async function AuthLogin(req, res, next) {
   try {
     const { username, password } = req.body;
     if (!username || !password)
@@ -14,7 +14,7 @@ export async function authLogin(req, res, next) {
   }
 }
 
-export async function authSignup(req, res, next) {
+export async function AuthSignup(req, res, next) {
   try {
     const user_data = req.body;
     const data = await addUser(user_data);
@@ -24,7 +24,7 @@ export async function authSignup(req, res, next) {
   }
 }
 
-export async function authLogout(req, res, next) {
+export async function AuthLogout(req, res, next) {
   try {
     if (!req.session || !req.session.user_id)
       throw new BadRequestError('You are not logged in!');

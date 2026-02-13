@@ -1,0 +1,43 @@
+-<--- STUDENT ENTRANCE MONITORING SYSTEM --->-
+
+-<--- FEATURES --->-
+
+USER AUTHENTICATION
+----- Functional -----
+> Secure Login and Sign-Up
+> Session Management with Auto Logout
+> User Validation and Access Control
+> MongoDB Database Integration
+> Password Encryption & Data Security
+
+STUDENTS MANAGEMENT
+----- Functional -----
+> Full CRUD Operations (Create, Read, Update, Delete) for Student Records
+> Student Profile with Photo Upload
+> Semester Enrollment Validation
+> Add, Update, Suspend Student Card ID
+> Advanced Student Record Filtering and Search
+> Bulk Student Import/Export (CSV/Excel)
+> Archive Inactive or Graduated Students
+
+ATTENDANCE LOG SYSTEM
+----- Functional -----
+> 5-Second Tap Delay to Prevent Duplicate Entries
+> Automated SMS Notifications for Entry and Exit (via SMS API) to Parents/Guardians
+> Entry Restriction for Unenrolled Students
+
+NOTIFICATION SYSTEM
+----- Functional -----
+> SMS Notifications for Entry & Exit (via SMS API)
+> Optional Email Notifications
+> Low Balance Alert for SMS Credits
+> Emergency Alert Broadcast to All Parents
+> Daily Attendance Summary to Guardians
+
+System Administration
+----- Functional -----
+> School Year & Semester Configuration
+> Holiday & No-Class Scheduling
+> SMS API Configuration Panel
+> System Activity Logs
+> Backup & Database Management
