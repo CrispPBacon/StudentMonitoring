@@ -3,6 +3,7 @@ import Sidebar from "./components/layout/Sidebar"
 import Dashboard from "./features/dashboard/Dashboard"
 import { Toaster } from "sonner"
 import Attendance from "./features/attendance/Attendance"
+import DisplayLog from "./features/display_log/DisplayLog"
 
 export default function App() {
   return (
@@ -12,6 +13,7 @@ export default function App() {
         <Route path="/attendance" element={<Attendance />} />
         <Route path="/students" element={<h1>HELLO</h1>} />
       </Route>
+      <Route path="/display" element={<DisplayLog />} />
     </Routes>
 
   )
