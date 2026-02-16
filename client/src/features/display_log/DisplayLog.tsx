@@ -1,7 +1,11 @@
 import { toTitleCase } from "@/lib/utils";
 import { Circle } from "@mui/icons-material";
 import logo from "@/assets/logo.webp"
+import { useSocket } from "@/hooks/useSocket";
 export default function DisplayLog() {
+    const { connected, } = useSocket();
+    const serverStatus = connected ? "online" : "offline"
+
     return (
         <div className="2xl:container 2xl:mx-auto gap-10 min-h-dvh flex flex-col items-center justify-center">
             {/* TITLE */}
@@ -9,12 +13,12 @@ export default function DisplayLog() {
                 <h1 className="text-4xl font-extrabold text-slate-800 tracking-wider">Letran Clock-in</h1>
                 {/* DISPLAY STATUS */}
                 <div className="flex gap-5">
-                    <StatusIndicator label="Card Reader" status="connected" />
-                    <StatusIndicator label="Server" status="online" />
+                    <StatusIndicator label="Card Reader" status={"offline"} />
+                    <StatusIndicator label="Server" status={serverStatus} />
                 </div>
             </div>
             {/* CARD */}
-            <div className="w-full flex justify-center items-center">
+            <div className="2xl:px-0 md:px-5 w-full flex justify-center items-center">
                 <Card />
             </div>
         </div>
@@ -40,9 +44,10 @@ export function StatusIndicator({ label, status, statusColor }: StatusIndicatorP
     )
 }
 
+
 export function Card() {
     return (
-        <div className="p-10 shadow-md flex justify-center gap-75">
+        <div className="p-10 shadow-md flex justify-around w-full">
             <span className="overflow-hidden bg-white flex w-80 h-80  rounded-full border-solid border-10 border-slate-800">
                 <img src={logo} alt="profile" />
             </span>
