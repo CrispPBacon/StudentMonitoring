@@ -2,11 +2,13 @@ import './config/environment.js';
 
 import express from 'express';
 import session from 'express-session';
+import http from 'http';
 
 import router from './routes/index.js';
 import { errorHandlerMiddleware } from './middlewares/error-handler.js';
 import { connect } from './config/db.js';
 import { sessionConfig, sessionLog } from './config/session.js';
+import { initSocket } from './socket/index.js';
 
 const app = express();
 const PORT = process.env.PORT;
@@ -19,8 +21,10 @@ function onServerStart() {
 }
 
 function startServer() {
-  app.listen(PORT, onServerStart);
-  return app;
+  const server = http.createServer(app);
+  initSocket(server);
+  server.listen(PORT, onServerStart);
+  return server;
 }
 
 app.use([
