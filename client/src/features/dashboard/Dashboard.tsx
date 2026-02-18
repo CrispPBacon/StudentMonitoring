@@ -13,7 +13,7 @@ import ButtonDialog from "@/features/dashboard/components/ButtonDialog";
 export default function Dashboard() {
     return (
         // < !--Dashbaord -- >
-        <main className="p-8 overflow-y-auto">
+        <main className="p-8 overflow-y-auto rounded-2xl bg-slate-50/95">
             {/* <!-- Title Page --> */}
             <div className="mb-6">
                 <h1 className="font-bold text-3xl">Dashboard</h1>
