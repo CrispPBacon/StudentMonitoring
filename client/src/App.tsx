@@ -1,30 +1,36 @@
-import { Outlet, Route, Routes } from "react-router-dom"
-import Sidebar from "./components/layout/Sidebar"
-import Dashboard from "./features/dashboard/Dashboard"
-import { Toaster } from "sonner"
-import Attendance from "./features/attendance/Attendance"
-import DisplayLog from "./features/display_log/DisplayLog"
+import { Route, Routes } from "react-router-dom"
+
+import React from 'react';
+import ProtectedRoute from "./components/layout/ProtectedRoute"
+import PublicRoute from "./components/layout/PublicRoute"
+
+// Lazy load the components
+const Dashboard = React.lazy(() => import("./features/dashboard/Dashboard"));
+const Attendance = React.lazy(() => import("./features/attendance/Attendance"));
+const DisplayLog = React.lazy(() => import("./features/display_log/DisplayLog"));
+const Login = React.lazy(() => import("./features/auth/Login"));
+const AppWrapper = React.lazy(() => import("./components/layout/AppWrapper"));
 
 export default function App() {
   return (
     <Routes>
-      <Route element={<AppWrapper />}>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/attendance" element={<Attendance />} />
-        <Route path="/students" element={<h1>HELLO</h1>} />
+      {/* ACCESSIBLE IF LOGGED IN */}
+      <Route element={<ProtectedRoute />}>
+        <Route element={<AppWrapper />}>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/attendance" element={<Attendance />} />
+          <Route path="/students" element={<h1>HELLO</h1>} />
+        </Route>
       </Route>
+
+      {/* ACCESSIBLE REGARDLESS OF AUTH */}
       <Route path="/display" element={<DisplayLog />} />
+
+      {/* ACCESSIBLE IF NOT LOGGED IN */}
+      <Route element={<PublicRoute />}>
+        <Route path="/login" element={<Login />} />
+      </Route>
     </Routes>
 
   )
-}
-
-function AppWrapper() {
-  return (<>
-    <Toaster theme="dark" />
-    <div className="2xl:container 2xl:mx-auto grid grid-cols-[16rem_1fr] gap-5 h-dvh w-full" >
-      <Sidebar />
-      <Outlet />
-    </div>
-  </>)
 }
