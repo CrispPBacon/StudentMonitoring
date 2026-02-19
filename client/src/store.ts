@@ -1,9 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
-import userReducer from './features/auth/userSlice';
-
+import { studentReducer } from './features/students_list';
+import { attendanceLogReducer } from './features/attendance';
+import { userReducer } from './features/authentication';
 const store = configureStore({
   reducer: {
     user: userReducer,
+    student: studentReducer,
+    attendanceLog: attendanceLogReducer,
   },
 });
 

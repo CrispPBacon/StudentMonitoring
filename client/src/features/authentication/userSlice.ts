@@ -1,42 +1,26 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import {
+  createSlice,
+  // type PayloadAction
+} from '@reduxjs/toolkit';
 import { fetchCurrentUser, loginUser, logoutUserThunk } from './userThunks';
-
-export interface User {
-  id: number;
-  name: string;
-  email: string;
-}
+import type { ErrorProps, User } from '@/lib/types';
 
 interface UserState {
   user: User | null;
   isLoading: boolean;
-  error: string | null;
+  error: ErrorProps | null;
 }
 
 const initialState: UserState = {
   user: null,
-  isLoading: false,
+  isLoading: true,
   error: null,
 };
 
 const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {
-    setUser: (state, action: PayloadAction<User>) => {
-      state.user = action.payload;
-      state.error = null;
-    },
-    logoutUser: (state) => {
-      state.user = null;
-    },
-    setLoading: (state, action: PayloadAction<boolean>) => {
-      state.isLoading = action.payload;
-    },
-    setError: (state, action: PayloadAction<string | null>) => {
-      state.error = action.payload;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
 
@@ -52,7 +36,7 @@ const userSlice = createSlice({
       .addCase(loginUser.rejected, (state, action) => {
         state.user = null;
         state.isLoading = false;
-        state.error = action.payload as string;
+        state.error = action.payload as ErrorProps;
       })
 
       // LOGOUT
@@ -75,6 +59,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { setUser, logoutUser, setLoading, setError } = userSlice.actions;
+// export const { setUser, logoutUser, setLoading, setError } = userSlice.actions;
 
 export default userSlice.reducer;

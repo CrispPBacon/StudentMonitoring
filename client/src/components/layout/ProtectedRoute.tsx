@@ -1,16 +1,27 @@
 import { Navigate, Outlet } from 'react-router-dom'
-import { useAppSelector } from '@/hooks/reduxHooks'
-import { Suspense } from 'react'
+import { useAppDispatch, useAppSelector } from '@/hooks/reduxHooks'
+import { Suspense, useEffect } from 'react'
+import { fetchCurrentUser } from '@/features/authentication/userThunks'
+import Loading from './Loading'
 
 const ProtectedRoute = () => {
-    const { user } = useAppSelector((state) => state.user)
+    const { user, isLoading } = useAppSelector((state) => state.user)
+    const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        if (!user) dispatch(fetchCurrentUser())
+    }, [dispatch, user])
+
+    if (isLoading) {
+        return null
+    }
 
     if (!user) {
         return <Navigate to="/login" replace />
     }
 
     return (
-        <Suspense fallback={<h1>Loading...</h1>}>
+        <Suspense fallback={<Loading />}>
             <Outlet />
         </Suspense>
     )

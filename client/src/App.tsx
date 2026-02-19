@@ -5,11 +5,13 @@ import ProtectedRoute from "./components/layout/ProtectedRoute"
 import PublicRoute from "./components/layout/PublicRoute"
 
 // Lazy load the components
-const Dashboard = React.lazy(() => import("./features/dashboard/Dashboard"));
-const Attendance = React.lazy(() => import("./features/attendance/Attendance"));
-const DisplayLog = React.lazy(() => import("./features/display_log/DisplayLog"));
-const Login = React.lazy(() => import("./features/auth/Login"));
 const AppWrapper = React.lazy(() => import("./components/layout/AppWrapper"));
+
+// Lazy load the pages
+const Attendance = React.lazy(() => import("./pages/Attendance"));
+const Dashboard = React.lazy(() => import("./pages/Dashboard"));
+const DisplayLog = React.lazy(() => import("./pages/DisplayLog"));
+const Login = React.lazy(() => import("./pages/Login"));
 
 export default function App() {
   return (
