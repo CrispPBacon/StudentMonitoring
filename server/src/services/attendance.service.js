@@ -13,9 +13,9 @@ async function getAttendanceLog(student) {
   return attendance || {};
 }
 
-export async function getAllAttendanceLog() {
-  const attendance = await Attendance.find({}).sort({ createdAt: -1 });
-  return attendance || {};
+export async function getAllAttendanceLog(query = null) {
+  const attendance = await Attendance.find(query || {}).sort({ createdAt: -1 });
+  return attendance || [];
 }
 
 export async function logStudentEntry(student_id) {

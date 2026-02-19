@@ -40,7 +40,27 @@ export async function EntryLog(req, res, next) {
 
 export async function GetAttendanceLog(req, res, next) {
   try {
-    const data = await getAllAttendanceLog();
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
+
+    const endOfToday = new Date();
+    endOfToday.setHours(23, 59, 59, 999);
+    const query = { createdAt: { $gte: startOfToday, $lte: endOfToday } };
+    const data = await getAllAttendanceLog(query);
+    return res.status(200).json(data);
+  } catch (error) {
+    next(error);
+  }
+}
+export async function GetTodayAttendanceLog(req, res, next) {
+  try {
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
+
+    const endOfToday = new Date();
+    endOfToday.setHours(23, 59, 59, 999);
+    const query = { createdAt: { $gte: startOfToday, $lte: endOfToday } };
+    const data = await getAllAttendanceLog(query);
     return res.status(200).json(data);
   } catch (error) {
     next(error);
