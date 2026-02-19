@@ -1,8 +1,11 @@
 import express from 'express';
-import { EntryLog } from '../controllers/attendance.controller.js';
+import {
+  EntryLog,
+  GetAttendanceLog,
+} from '../controllers/attendance.controller.js';
 
 const router = express.Router();
 
-router.route('/attendance').post(EntryLog);
+router.route('/attendance').get(GetAttendanceLog).post(EntryLog);
 
 export default router;

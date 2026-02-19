@@ -3,14 +3,18 @@ import {
   handleValidationErrors,
 } from './validation-rules.js';
 import {
-  assertUserExists,
   assertUsernameAvailable,
   assertNoActiveSession,
+  assertUserExistsByEmail,
 } from './auth/user.validation.js';
 
 export const validateLogin = [
   assertNoActiveSession,
-  createFieldValidator(['username'], 4, [assertUserExists]),
+  createFieldValidator(['email'], 4, [assertUserExistsByEmail])
+    .pop()
+    .isEmail()
+    .withMessage('Invalid email address'),
+
   createFieldValidator(['password'], 1),
   handleValidationErrors,
 ];

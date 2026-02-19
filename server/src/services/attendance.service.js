@@ -13,6 +13,11 @@ async function getAttendanceLog(student) {
   return attendance || {};
 }
 
+export async function getAllAttendanceLog() {
+  const attendance = await Attendance.find({}).sort({ createdAt: -1 });
+  return attendance || {};
+}
+
 export async function logStudentEntry(student_id) {
   const last_log = await getAttendanceLog(student_id);
 
@@ -23,6 +28,7 @@ export async function logStudentEntry(student_id) {
   const type = getNextAttendanceType(last_log);
 
   const log = await addAttendanceLog(student_id, type);
+
   console.log(log);
   return { ignored: false, type };
 }

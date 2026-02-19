@@ -3,12 +3,15 @@ import './config/environment.js';
 import express from 'express';
 import session from 'express-session';
 import http from 'http';
+import cors from 'cors';
 
 import router from './routes/index.js';
 import { errorHandlerMiddleware } from './middlewares/error-handler.js';
 import { connect } from './config/db.js';
 import { sessionConfig, sessionLog } from './config/session.js';
 import { initSocket } from './socket/index.js';
+import { corsConfig } from './config/cors.js';
+// import { corsConfig } from './config/cors.js';
 
 const app = express();
 const PORT = process.env.PORT;
@@ -30,6 +33,7 @@ function startServer() {
 app.use([
   express.json(),
   express.urlencoded({ extended: true }),
+  cors(corsConfig),
   session(sessionConfig),
   sessionLog,
   router,

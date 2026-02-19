@@ -1,5 +1,9 @@
-import { logStudentEntry } from '../services/attendance.service.js';
+import {
+  getAllAttendanceLog,
+  logStudentEntry,
+} from '../services/attendance.service.js';
 import { getStudentByCardId } from '../services/student.service.js';
+import { getIO } from '../socket/index.js';
 
 /* <--- Attendance Controller ---> */
 export async function EntryLog(req, res, next) {
@@ -18,7 +22,26 @@ export async function EntryLog(req, res, next) {
       return res.sendStatus(429);
     }
 
+    const { student_id, education, display_photo } = student;
+    const URL = `${process.env.URL}/display_photo/${display_photo}`;
+    const data = {
+      student_id,
+      display_photo: URL,
+      program: education.program,
+      type: result.type,
+    };
+    getIO().emit('attendance', data);
+
     return res.sendStatus(200);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function GetAttendanceLog(req, res, next) {
+  try {
+    const data = await getAllAttendanceLog();
+    return res.status(200).json(data);
   } catch (error) {
     next(error);
   }

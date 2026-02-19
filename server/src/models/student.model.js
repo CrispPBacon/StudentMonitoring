@@ -2,6 +2,11 @@ import mongoose from 'mongoose';
 
 const StudentSchema = new mongoose.Schema(
   {
+    display_photo: {
+      type: String,
+      trim: true,
+      default: 'default.webp',
+    },
     first_name: {
       type: String,
       required: [true, 'First name is required'],
@@ -43,6 +48,12 @@ const StudentSchema = new mongoose.Schema(
         lowercase: true,
         trim: true,
         required: [true, 'Education program is required'],
+      },
+      year: {
+        type: String,
+        lowercase: true,
+        trim: true,
+        required: [true, 'Education year is required'],
       },
     },
     guardian: {

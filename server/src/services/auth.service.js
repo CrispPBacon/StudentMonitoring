@@ -5,11 +5,11 @@ import { NotFoundError, UnauthorizedError } from '../utils/errors.js';
 /* <--- LOGIN USER ---> 
     NOTE: LOGIN THE USER TO THEIR ACCOUNT
 */
-export async function login(username, password) {
-  if (!username) throw NotFoundError('Please enter your username');
+export async function login(email, password) {
+  if (!email) throw NotFoundError('Please enter your username');
   if (!password) throw NotFoundError('Please enter your password');
 
-  const user_data = await getUser(username);
+  const user_data = await getUserByEmail(email);
 
   if (!user_data) throw NotFoundError('User not found');
   if (user_data.password !== password)
@@ -57,12 +57,20 @@ export async function getUser(identifier) {
   return user_data || null;
 }
 
+export async function getUserByEmail(email) {
+  const user_data = await User.findOne({ email })
+    .select('-createdAt -updatedAt -__v')
+    .lean();
+
+  return user_data || null;
+}
+
 /* <--- CHECK LOGIN ---> 
     NOTE: Checks if session exist and valid, then return user data.
 */
 export async function getUserBySession(session) {
   if (!session || !session.user_id) return null;
   const user_data = getUser(session.user_id);
-  delete user_data.password;
-  return user_data;
+  delete user_data?.password;
+  return user_data || null;
 }

@@ -1,5 +1,9 @@
 import { ConflictError, NotFoundError } from '../../../utils/errors.js';
-import { getUser, getUserBySession } from '../../../services/auth.service.js';
+import {
+  getUser,
+  getUserByEmail,
+  getUserBySession,
+} from '../../../services/auth.service.js';
 
 /**
  * Checks if a given username is available (not already taken).
@@ -24,6 +28,12 @@ export async function assertUsernameAvailable(username) {
 export async function assertUserExists(username) {
   const userExist = Boolean(await getUser(username));
   if (!userExist) throw new NotFoundError('User does not exist');
+  return true;
+}
+
+export async function assertUserExistsByEmail(email) {
+  const emailExist = Boolean(await getUserByEmail(email));
+  if (!emailExist) throw new NotFoundError('User does not exist');
   return true;
 }
 

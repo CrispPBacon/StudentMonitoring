@@ -1,11 +1,19 @@
 import Student from '../models/student.model.js';
+import mongoose from 'mongoose';
 
 /* <--- ADD STUDENT ---> 
     NOTE: Register Student to Database
 */
 export async function addStudent(student_data) {
-  const { first_name, last_name, student_id, education } = student_data;
-  const student = new Student({ first_name, last_name, student_id, education });
+  const { first_name, last_name, student_id, education, display_photo } =
+    student_data || {};
+  const student = new Student({
+    first_name,
+    last_name,
+    student_id,
+    education,
+    display_photo,
+  });
   student.save();
   return student;
 }
@@ -13,10 +21,18 @@ export async function addStudent(student_data) {
 /* <--- GET STUDENT INFORMATION ---> 
     NOTE: Fetch Student Information From the Database.
 */
-export async function getStudent(student_id) {
-  const student = await Student.findById(student_id);
-  return student;
+export async function getStudent(identifier) {
+  const query = mongoose.Types.ObjectId.isValid(identifier)
+    ? { _id: identifier }
+    : { student_id: identifier };
+
+  const student = await Student.findOne(query)
+    .select('-createdAt -updatedAt -__v')
+    .lean();
+
+  return student || null;
 }
+
 export async function getStudentByCardId(card_id) {
   const student = await Student.findOne({ card_id }).select(
     '-guardian -updatedAt -__v'

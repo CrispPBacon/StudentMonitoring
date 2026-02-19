@@ -1,14 +1,18 @@
-import { addUser, login } from '../services/auth.service.js';
-import { BadRequestError, NotFoundError } from '../utils/errors.js';
+import { addUser, getUserBySession, login } from '../services/auth.service.js';
+import {
+  BadRequestError,
+  NotFoundError,
+  UnauthorizedError,
+} from '../utils/errors.js';
 
 export async function AuthLogin(req, res, next) {
   try {
-    const { username, password } = req.body;
-    if (!username || !password)
+    const { email, password } = req.body;
+    if (!email || !password)
       throw new NotFoundError('Please enter your username and password!');
-    const user_data = await login(username, password);
+    const user_data = await login(email, password);
     req.session.user_id = user_data._id.toString();
-    return res.status(200).json(user_data);
+    return res.status(200).json({ data: user_data });
   } catch (error) {
     next(error);
   }
@@ -30,7 +34,21 @@ export async function AuthLogout(req, res, next) {
       throw new BadRequestError('You are not logged in!');
     req.session.destroy();
     res.clearCookie('connect.sid');
-    return res.status(200).json({ msg: 'You have logged out' });
+    return res.status(200).json({ data: { msg: 'You have logged out' } });
+  } catch (e) {
+    next(e);
+  }
+}
+
+export async function RefreshAuth(req, res, next) {
+  try {
+    const user = await getUserBySession(req.session);
+    if (!user) {
+      req.session.destroy();
+      res.clearCookie('connect.sid');
+      throw new UnauthorizedError('Session invalid or does not exist');
+    }
+    return res.status(200).json({ data: user });
   } catch (e) {
     next(e);
   }
