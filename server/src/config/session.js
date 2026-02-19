@@ -28,7 +28,7 @@ const sessionConfig = {
 };
 
 const sessionLog = (_req, _, next) => {
-  if (isProduction) console.log(_req.session);
+  // if (!isProduction) console.log(_req.session);
   next();
 };
 
