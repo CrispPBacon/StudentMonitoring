@@ -1,18 +1,22 @@
--<--- STUDENT ENTRANCE MONITORING SYSTEM --->-
+-<--- STUDENT ENTRANCE MONITORING SYSTEM --->-\
+
+✅ - DONE
+❌ - TO WORK ON
 
 -<--- FEATURES --->-
 
 USER AUTHENTICATION
 ----- Functional -----
-> Secure Login and Sign-Up
-> Session Management with Auto Logout
-> User Validation and Access Control
-> MongoDB Database Integration
-> Password Encryption & Data Security
+✅ > Secure Login and Sign-Up
+✅ > Session Management with Auto Logout
+✅ > User Validation 
+❌ > Access Control
+✅ > MongoDB Database Integration
+❌ > Password Encryption & Data Security
 
 STUDENTS MANAGEMENT
 ----- Functional -----
-> Full CRUD Operations (Create, Read, Update, Delete) for Student Records
+✅ > Full CRUD Operations (Create, Read, Update, Delete) for Student Records
 > Student Profile with Photo Upload
 > Semester Enrollment Validation
 > Add, Update, Suspend Student Card ID
@@ -22,9 +26,9 @@ STUDENTS MANAGEMENT
 
 ATTENDANCE LOG SYSTEM
 ----- Functional -----
-> 5-Second Tap Delay to Prevent Duplicate Entries
+✅ > 5-Second Tap Delay to Prevent Duplicate Entries
 > Automated SMS Notifications for Entry and Exit (via SMS API) to Parents/Guardians
-> Entry Restriction for Unenrolled Students
+✅ > Entry Restriction for Unenrolled Students
 
 NOTIFICATION SYSTEM
 ----- Functional -----
