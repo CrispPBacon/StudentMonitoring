@@ -2,6 +2,7 @@ const whitelist = process.env.ALLOWED_ORIGINS
   ? process.env.ALLOWED_ORIGINS.split(',')
   : ['http://localhost:5173', 'http://localhost'];
 
+console.log(whitelist);
 export const corsConfig = {
   origin: (origin, callback) => {
     // ? Allow requests with no origin (like mobile apps or curl)
