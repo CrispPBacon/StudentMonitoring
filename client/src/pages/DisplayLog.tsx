@@ -2,13 +2,9 @@ import bg from "@/assets/Letran Clock-in.png"
 import { useSocket } from "@/hooks/useSocket";
 import { useEffect, useState } from "react";
 import { CardID, StatusIndicator } from "@/features/display_log";
+import type { studentData } from "@/lib/types";
 
-interface studentData {
-    student_id: string
-    program: string
-    display_photo: string
-    type: "entry" | "exit"
-}
+
 
 export default function DisplayLog() {
     const [student, setStudent] = useState<studentData | null>(null)

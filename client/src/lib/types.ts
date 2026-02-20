@@ -28,7 +28,14 @@ export interface StudentProps {
 }
 
 export interface AttendanceProps {
-  student: string;
+  _id?: string;
+  student: StudentProps;
   type: 'entry' | 'exit';
   createdAt: string;
+}
+
+export interface studentData extends AttendanceProps {
+  student_id: string;
+  program: string;
+  display_photo: string;
 }
