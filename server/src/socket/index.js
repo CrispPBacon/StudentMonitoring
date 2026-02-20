@@ -3,10 +3,14 @@ import { registerHandlers } from './handlers.js';
 
 let io;
 
+const whitelist = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(',')
+  : ['http://localhost:5173'];
+
 export function initSocket(server) {
   io = new Server(server, {
     cors: {
-      origin: 'http://localhost:5173', // your React app
+      origin: whitelist, // your React app
       methods: ['GET', 'POST'],
     },
   });
