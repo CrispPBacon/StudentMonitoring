@@ -2,8 +2,7 @@ import Attendance from '../models/attendance.model.js';
 
 async function addAttendanceLog(student, type) {
   const attendance = new Attendance({ student, type });
-  attendance.save();
-  return attendance;
+  return attendance.save();
 }
 
 async function getAttendanceLog(student) {
@@ -14,7 +13,9 @@ async function getAttendanceLog(student) {
 }
 
 export async function getAllAttendanceLog(query = null) {
-  const attendance = await Attendance.find(query || {}).sort({ createdAt: -1 });
+  const attendance = await Attendance.find(query || {})
+    .sort({ createdAt: -1 })
+    .populate('student');
   return attendance || [];
 }
 
@@ -29,8 +30,8 @@ export async function logStudentEntry(student_id) {
 
   const log = await addAttendanceLog(student_id, type);
 
-  console.log(log);
-  return { ignored: false, type };
+  const createdAt = log.createdAt;
+  return { ignored: false, type, createdAt };
 }
 
 /* <--- HELPERS ---> 

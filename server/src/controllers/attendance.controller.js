@@ -4,21 +4,25 @@ import {
 } from '../services/attendance.service.js';
 import { getStudentByCardId } from '../services/student.service.js';
 import { getIO } from '../socket/index.js';
+import { getTodayDateRange } from '../utils/dateRange.js';
 
 /* <--- Attendance Controller ---> */
 export async function EntryLog(req, res, next) {
   try {
-    let { card_id, finger_id } = req.body ?? {};
+    let { card_id } = req.body ?? {};
     if (card_id.includes(' ')) card_id = card_id.replaceAll(' ', '_');
-    if (!card_id || finger_id <= 0) return res.sendStatus(401);
-
+    if (!card_id) return res.sendStatus(401);
+    const finger_id = 1;
+    if (finger_id <= 0) console.log('ok');
+    console.log(card_id);
     const student = await getStudentByCardId(card_id);
     if (!student) return res.sendStatus(401);
 
-    const result = await logStudentEntry(student._id);
+    // const result = await logStudentEntry(student._id);
+    const { ignored, type, createdAt } = await logStudentEntry(student._id);
 
     // Silent ignore for double tap
-    if (result.ignored) {
+    if (ignored) {
       return res.sendStatus(429);
     }
 
@@ -28,8 +32,10 @@ export async function EntryLog(req, res, next) {
       student_id,
       display_photo: URL,
       program: education.program,
-      type: result.type,
+      type,
+      createdAt,
     };
+
     getIO().emit('attendance', data);
 
     return res.sendStatus(200);
@@ -38,28 +44,19 @@ export async function EntryLog(req, res, next) {
   }
 }
 
-export async function GetAttendanceLog(req, res, next) {
+export async function GetAttendanceLog(_, res, next) {
   try {
-    const startOfToday = new Date();
-    startOfToday.setHours(0, 0, 0, 0);
-
-    const endOfToday = new Date();
-    endOfToday.setHours(23, 59, 59, 999);
-    const query = { createdAt: { $gte: startOfToday, $lte: endOfToday } };
-    const data = await getAllAttendanceLog(query);
+    const data = await getAllAttendanceLog();
     return res.status(200).json(data);
   } catch (error) {
     next(error);
   }
 }
-export async function GetTodayAttendanceLog(req, res, next) {
-  try {
-    const startOfToday = new Date();
-    startOfToday.setHours(0, 0, 0, 0);
 
-    const endOfToday = new Date();
-    endOfToday.setHours(23, 59, 59, 999);
-    const query = { createdAt: { $gte: startOfToday, $lte: endOfToday } };
+export async function GetTodayAttendanceLog(_, res, next) {
+  try {
+    const { startOfDayPH, endOfDayPH } = getTodayDateRange();
+    const query = { createdAt: { $gte: startOfDayPH, $lte: endOfDayPH } };
     const data = await getAllAttendanceLog(query);
     return res.status(200).json(data);
   } catch (error) {

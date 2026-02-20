@@ -3,8 +3,9 @@ import { BadRequestError } from '../utils/errors.js';
 
 export async function CreateStudent(req, res, next) {
   try {
-    const { firstName, lastName, studentID, program, year } = req.body || {};
-
+    const { firstName, lastName, studentID, program, year, card_id } =
+      req.body || {};
+    const finger_id = 0;
     const data = {
       first_name: firstName,
       last_name: lastName,
@@ -14,11 +15,13 @@ export async function CreateStudent(req, res, next) {
         program,
         year,
       },
+      finger_id,
+      card_id,
     };
+
     if (req?.file) data['display_photo'] = req.file.filename;
 
     const result = await addStudent(data);
-    console.log(data);
 
     return res.status(200).json(result);
   } catch (error) {

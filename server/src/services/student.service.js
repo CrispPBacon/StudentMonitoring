@@ -5,17 +5,17 @@ import mongoose from 'mongoose';
     NOTE: Register Student to Database
 */
 export async function addStudent(student_data) {
-  const { first_name, last_name, student_id, education, display_photo } =
-    student_data || {};
-  const student = new Student({
-    first_name,
-    last_name,
-    student_id,
-    education,
-    display_photo,
-  });
-  student.save();
-  return student;
+  // const { first_name, last_name, student_id, education, display_photo } =
+  //   student_data || {};
+  // const student = new Student({
+  //   first_name,
+  //   last_name,
+  //   student_id,
+  //   education,
+  //   display_photo,
+  // });
+  const student = new Student(student_data);
+  return student.save();
 }
 
 /* <--- GET STUDENT INFORMATION ---> 
