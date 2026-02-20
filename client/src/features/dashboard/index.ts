@@ -4,3 +4,6 @@ import QuickAccess from './components/QuickAccess';
 import Overview from './components/Overview';
 
 export { Chart, StudentTable, QuickAccess, Overview };
+
+import type { ChartDataProps, HourlyCount } from './constants/chartData';
+export type { ChartDataProps, HourlyCount };
