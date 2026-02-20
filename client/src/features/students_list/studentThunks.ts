@@ -25,6 +25,7 @@ export const addStudent = createAsyncThunk<
     firstName: string;
     lastName: string;
     studentID: string;
+    cardID: string;
     program: string;
     year: string;
     student_display_photo?: File;
@@ -35,6 +36,7 @@ export const addStudent = createAsyncThunk<
     formData.append('firstName', credentials.firstName);
     formData.append('lastName', credentials.lastName);
     formData.append('studentID', credentials.studentID);
+    formData.append('card_id', credentials.cardID);
     formData.append('program', credentials.program);
     formData.append('year', credentials.year);
 
