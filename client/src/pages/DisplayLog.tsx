@@ -2,12 +2,12 @@ import bg from "@/assets/Letran Clock-in.png"
 import { useSocket } from "@/hooks/useSocket";
 import { useEffect, useState } from "react";
 import { CardID, StatusIndicator } from "@/features/display_log";
-import type { studentData } from "@/lib/types";
+import type { AttendanceProps, } from "@/lib/types";
 
 
 
 export default function DisplayLog() {
-    const [student, setStudent] = useState<studentData | null>(null)
+    const [log, setLog] = useState<AttendanceProps | null>(null)
     const { socket, connected, } = useSocket();
     const serverStatus = connected ? "online" : "offline"
 
@@ -16,7 +16,7 @@ export default function DisplayLog() {
         const timerRef = { current: null as ReturnType<typeof setTimeout> | null };
         const delayRef = { current: null as ReturnType<typeof setTimeout> | null };
 
-        const handleAttendance = (data: studentData) => {
+        const handleAttendance = (data: AttendanceProps) => {
 
             // Clear previous timers if any
             if (timerRef.current) {
@@ -29,15 +29,15 @@ export default function DisplayLog() {
             }
 
             // Hide current student first
-            setStudent(null);
+            setLog(null);
 
             // Delay before showing the new student
             delayRef.current = setTimeout(() => {
-                setStudent(data);
+                setLog(data);
 
                 // Hide after 5 seconds
                 timerRef.current = setTimeout(() => {
-                    setStudent(null);
+                    setLog(null);
                 }, 5000);
 
             }, 500); // 500ms delay before showing new student
@@ -67,9 +67,9 @@ export default function DisplayLog() {
             </div>
             {/* CARD */}
             <div className="2xl:px-0 md:px-5 w-full flex justify-center items-center gap-10">
-                {student ? <h1 className={`${student.type == "entry" ? "text-green-400 bg-green-100" : "bg-red-100 text-red-400"} p-3 text-7xl uppercase tracking-widest`}>{student.type == "entry" ? "Welcome" : "Goodbye"}</h1> : null}
-                {student ? <CardID student_id={(student?.student_id || "N/A")} type={student?.type} program={student?.program || "N/A"} display_photo={student?.display_photo} /> : null}
-                {student ? <h1 className={`${student.type == "entry" ? "text-green-400 bg-green-100" : "bg-red-100 text-red-400"} p-3 text-7xl uppercase tracking-widest`}>Student</h1> : null}
+                {log ? <h1 className={`${log.type == "entry" ? "text-green-400 bg-green-100" : "bg-red-100 text-red-400"} p-3 text-7xl uppercase tracking-widest`}>{log.type == "entry" ? "Welcome" : "Goodbye"}</h1> : null}
+                {log ? <CardID student_id={(log?.student.student_id || "N/A")} type={log?.type} program={log?.student.education.program || "N/A"} display_photo={log?.student.display_photo} /> : null}
+                {log ? <h1 className={`${log.type == "entry" ? "text-green-400 bg-green-100" : "bg-red-100 text-red-400"} p-3 text-7xl uppercase tracking-widest`}>Student</h1> : null}
             </div>
         </div>
     )

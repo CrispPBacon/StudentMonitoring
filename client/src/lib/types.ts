@@ -21,10 +21,11 @@ export interface StudentProps {
   _id: string;
   first_name: string;
   last_name: string;
-  education: { category: string; program: string };
-  guardian: { notification: 'on' | 'off' };
+  education: { category: string; program: string; year: string };
   card_id: string;
   student_id: string;
+  display_photo: string;
+  guardian?: { notification: 'on' | 'off' };
 }
 
 export interface AttendanceProps {
@@ -32,10 +33,4 @@ export interface AttendanceProps {
   student: StudentProps;
   type: 'entry' | 'exit';
   createdAt: string;
-}
-
-export interface studentData extends AttendanceProps {
-  student_id: string;
-  program: string;
-  display_photo: string;
 }

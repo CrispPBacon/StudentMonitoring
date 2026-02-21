@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from "@/hooks/reduxHooks";
 import { Chart, Overview, QuickAccess, StudentTable } from "@/features/dashboard";
 import { fetchStudents } from "@/features/students_list";
 import { fetchAttendanceLog } from "@/features/attendance";
-import type { studentData } from "@/lib/types";
+import type { AttendanceProps } from "@/lib/types";
 import { useSocket } from "@/hooks/useSocket";
 import { addAttendanceLog } from "@/features/attendance/attendanceSlice";
 import { getHourlyChartData } from "@/features/dashboard/utils/getHourlyChartData";
@@ -26,13 +26,9 @@ export default function Dashboard() {
     }, [dispatch])
 
     useEffect(() => {
-        const handleAttendance = (data: studentData) => {
+        const handleAttendance = (data: AttendanceProps) => {
             if (!data) return;
-            const { student_id, createdAt, type } = data
-            const student = students.find(s => s._id === student_id);
-            if (!student) return;
-            const attendanceLog = { student, type, createdAt, }
-            dispatch(addAttendanceLog(attendanceLog))
+            dispatch(addAttendanceLog(data))
         }
         socket.on("attendance", handleAttendance);
 

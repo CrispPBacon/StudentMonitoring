@@ -20,18 +20,17 @@ export async function getAllAttendanceLog(query = null) {
 }
 
 export async function logStudentEntry(student_id) {
+  // NOTE: GET COOLDOWN
   const last_log = await getAttendanceLog(student_id);
-
   if (isWithinCooldown(last_log)) {
     return { ignored: true };
   }
 
+  // NOTE: GET ATTENDANCE LOG
   const type = getNextAttendanceType(last_log);
-
   const log = await addAttendanceLog(student_id, type);
 
-  const createdAt = log.createdAt;
-  return { ignored: false, type, createdAt };
+  return { ignored: false, log };
 }
 
 /* <--- HELPERS ---> 

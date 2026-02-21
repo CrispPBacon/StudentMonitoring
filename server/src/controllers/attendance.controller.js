@@ -15,29 +15,29 @@ export async function EntryLog(req, res, next) {
     const finger_id = 1;
     if (finger_id <= 0) console.log('ok');
     console.log(card_id);
+
     const student = await getStudentByCardId(card_id);
     if (!student) return res.sendStatus(401);
 
-    // const result = await logStudentEntry(student._id);
-    const { ignored, type, createdAt } = await logStudentEntry(student._id);
-
     // Silent ignore for double tap
+    const { log, ignored } = await logStudentEntry(student._id);
     if (ignored) {
       return res.sendStatus(429);
     }
 
-    const { student_id, education, display_photo } = student;
+    const { display_photo } = student;
     const URL = `${process.env.URL}/display_photo/${display_photo}`;
-    const data = {
-      student_id,
-      display_photo: URL,
-      program: education.program,
+
+    const { type, createdAt, _id } = log;
+    const attendanceData = {
+      _id,
+      student: { ...student._doc, display_photo: URL },
       type,
       createdAt,
     };
+    console.log(attendanceData);
 
-    getIO().emit('attendance', data);
-
+    getIO().emit('attendance', attendanceData);
     return res.sendStatus(200);
   } catch (error) {
     next(error);
