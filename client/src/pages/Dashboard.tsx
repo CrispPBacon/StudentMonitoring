@@ -6,44 +6,30 @@ import { useAppDispatch, useAppSelector } from "@/hooks/reduxHooks";
 import { Chart, Overview, QuickAccess, StudentTable } from "@/features/dashboard";
 import { fetchStudents } from "@/features/students_list";
 import { fetchAttendanceLog } from "@/features/attendance";
-import type { AttendanceProps } from "@/lib/types";
-import { useSocket } from "@/hooks/useSocket";
-import { addAttendanceLog } from "@/features/attendance/attendanceSlice";
 import { getHourlyChartData } from "@/features/dashboard/utils/getHourlyChartData";
 
 
 export default function Dashboard() {
     const { students } = useAppSelector((state) => state.student)
     const { exitToday, entryToday, attendanceLog } = useAppSelector((state) => state.attendanceLog)
-
     const dispatch = useAppDispatch()
-    const { socket } = useSocket();
 
 
     useEffect(() => {
-        dispatch(fetchStudents())
-        dispatch(fetchAttendanceLog())
-    }, [dispatch])
-
-    useEffect(() => {
-        const handleAttendance = (data: AttendanceProps) => {
-            if (!data) return;
-            dispatch(addAttendanceLog(data))
-        }
-        socket.on("attendance", handleAttendance);
-
-        return () => {
-            socket.off("attendance", handleAttendance);
-        }
-    }, [socket, dispatch, students])
+        if (students.length == 0) dispatch(fetchStudents())
+        if (attendanceLog.length == 0)
+            dispatch(fetchAttendanceLog())
+    }, [dispatch, students, attendanceLog])
 
 
     return (
-        <main className="p-8 overflow-y-auto rounded-2xl bg-slate-50/95">
+        <main className="p-8 overflow-y-auto rounded-2xl bg-slate-50/95 animate-entry">
+            {/* Header */}
             <div className="mb-6">
-                <h1 className="font-bold text-3xl">Dashboard</h1>
+                <h1 className="text-2xl font-bold text-slate-800">Dashboard</h1>
+                <p className="text-sm text-slate-500">Realtime Students Monitoring</p>
             </div>
-            {/* <--- Components ---> */}
+            {/* <--- Components ---> */}            {/* <--- Components ---> */}
             <Overview totalStudents={students.length} entry={exitToday} exit={entryToday} totalTaps={exitToday + entryToday} />
             <QuickAccess />
 
@@ -54,7 +40,6 @@ export default function Dashboard() {
                     <StudentTable />
                 </div>
             </div>
-
         </main >
     )
 }
