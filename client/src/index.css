@@ -148,3 +148,19 @@
 nav ul .active {
   @apply bg-slate-100 text-purple-500 border-purple-400;
 }
+
+/* Animations */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-15px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-entry {
+  animation: slideIn 0.4s ease-out forwards;
+}

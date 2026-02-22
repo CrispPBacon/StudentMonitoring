@@ -1,61 +1,34 @@
-// import { useAppSelector } from "@/hooks/reduxHooks"
+import { useAppSelector } from "@/hooks/reduxHooks"
 import { formatPHDate } from "@/utils/formatDate"
+import { toTitleCase } from "@/utils/formatString";
+import { Circle, LoginOutlined, LogoutOutlined } from "@mui/icons-material";
 
 export default function StudentTable() {
-    // const { attendanceLog } = useAppSelector(state => state.attendanceLog)
+    const { attendanceLog } = useAppSelector(state => state.attendanceLog)
 
-    // const latestFive = [...attendanceLog]
-    //     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-    //     .slice(0, 5);
+    const latestFive = [...attendanceLog]
+        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+        .slice(0, 10);
+
     return (
         <div className="p-4">
-            {/* <!-- Filters --> */}
-            <strong>Entry Logs</strong>
-            {/* <div className="mb-4 mt-4 flex flex-wrap gap-2">
-                <button
-                    className="px-4 sm:px-5 py-2 rounded-full bg-slate-900 text-white text-sm shadow"
-                >
-                    Daily
-                </button>
-                <button
-                    className="px-4 sm:px-5 py-2 rounded-full bg-white text-slate-600 text-sm shadow-sm hover:bg-slate-50"
-                >
-                    Weekly
-                </button>
-                <button
-                    className="px-4 sm:px-5 py-2 rounded-full bg-white text-slate-600 text-sm shadow-sm hover:bg-slate-50"
-                >
-                    Monthly
-                </button>
-            </div> */}
-            {/* <!-- End of Filters --> */}
-
+            {/* <!-- Header --> */}
+            <span className="flex items-center justify-between">
+                <h1 className="text-2xl font-bold text-slate-800">Campus Activity Log</h1>
+                <span className="text-sm text-slate-500">
+                    <Circle style={{ fontSize: '.5rem' }} className="text-green-400 mr-1" />
+                    <span>Live Monitoring</span>
+                </span>
+            </span>
             {/* <!-- Student Table List --> */}
-            <div className="grid grid-cols-4 text-sm mt-4 ">
-                {/* <!-- Header --> */}
-                <div className="font-bold p-2 text-slate-600 border-b-2">Student ID</div>
-                <div className="font-bold p-2 text-slate-600 border-b-2">Student Name</div>
-                <div className="font-bold p-2 text-slate-600 border-b-2">Time</div>
-                <div className="font-bold p-2 text-slate-600 border-b-2">Type</div>
+            <div className="grid grid-cols-1 text-sm mt-4 overflow-y-auto h-80 ">
+                {attendanceLog.length > 0 ? latestFive.map(val => {
+                    const { createdAt, type, student } = val
+                    const { first_name, last_name, student_id } = student
+                    return <StudentData key={val._id} first_name={first_name} last_name={last_name} student_id={student_id} createdAt={createdAt} type={type} />
+                }) : null}
 
-                {/* <!-- Row 1 --> */}
-                {/* <div className="p-2">17-02919</div>
-                <div className="p-2">Allan Soriano</div>
-                <div className="p-2">07:30 AM</div>
-                <div className="p-2">January 12, 2026</div> */}
-                {/* {attendanceLog.length > 0 ? latestFive.map(val => {
-                    const { createdAt } = val
-                    console.log(val)
-                    return <StudentData key={val._id} first_name="Allan" last_name="Soriano" student_id="17-02919" createdAt={createdAt} type="Entry" />
-                }) : null} */}
-
-                <StudentData first_name="Allan" last_name="Soriano" student_id="17-02919" createdAt="2026-02-20T18:26:35.132Z" type="Entry" />
-                <StudentData first_name="Allan" last_name="Soriano" student_id="17-02919" createdAt="2026-02-20T18:26:35.132Z" type="Exit" />
-                <StudentData first_name="Allan" last_name="Soriano" student_id="17-02919" createdAt="2026-02-20T18:26:35.132Z" type="Entry" />
-                <StudentData first_name="Allan" last_name="Soriano" student_id="17-02919" createdAt="2026-02-20T18:26:35.132Z" type="Exit" />
-                <StudentData first_name="Allan" last_name="Soriano" student_id="17-02919" createdAt="2026-02-20T18:26:35.132Z" type="Entry" />
             </div>
-            {/* <!-- End of Student Table List --> */}
         </div>
     )
 }
@@ -69,10 +42,25 @@ interface StudentDataProps {
 }
 export function StudentData({ student_id, first_name, last_name, createdAt, type }: StudentDataProps) {
     const { hour, minute, unit } = formatPHDate(createdAt)
-    return (<>
-        <div className="p-2">{student_id}</div>
-        <div className="p-2">{`${first_name} ${last_name}`}</div>
-        <div className="p-2">{`${hour}:${minute} ${unit}`}</div>
-        <div className="p-2">{type}</div>
-    </>)
+    return (
+        <div className="flex items-center justify-between p-5 hover:bg-slate-50 animate-entry">
+            <div className="flex items-center gap-4">
+                <div className={`w-10 h-10 flex items-center justify-center rounded-full ${type == "exit" ? "bg-red-100 text-red-600" : "bg-emerald-100 text-emerald-600"} font-bold`}>
+                    {type == 'entry' ? <LoginOutlined /> : <LogoutOutlined />}
+                </div>
+                <div>
+                    <p className="font-semibold text-slate-800">
+                        {`${toTitleCase(`${first_name} ${last_name}`)}`}
+                    </p>
+                    <p className="text-sm text-slate-500">
+                        {type == "entry" ? "Entered the campus" : "Left the campus"}
+                    </p>
+                </div>
+            </div>
+            <span className="text-sm text-slate-400">
+                <h6>{student_id}</h6>
+                <h6>Today • {`${hour}:${minute} ${unit}`}</h6>
+            </span>
+        </div>
+    )
 }
