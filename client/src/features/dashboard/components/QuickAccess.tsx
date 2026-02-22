@@ -13,7 +13,7 @@ import AddStudentForm from "./forms/AddStudentForm";
 export default function QuickAccess() {
     const [open, setOpen] = useState(false);
     return (
-        <div className="mb-6 bg-white p-5 rounded-xl shadow-md">
+        <div className="mb-1 bg-white p-5 rounded-xl shadow-md">
             <strong>Quick Access</strong>
             <div
                 className="mt-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"

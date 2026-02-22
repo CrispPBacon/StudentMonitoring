@@ -8,7 +8,7 @@ import { logoutUserThunk } from '@/features/authentication/userThunks';
 export default function Sidebar() {
 
     return (
-        <aside className="px-4 rounded-2xl bg-slate-50/95">
+        <aside className="px-4 rounded-2xl bg-slate-50/95 animate-entry">
             {/* <!-- Title --> */}
             <span className="mt-10 mb-5 flex flex-col px-4 items-center gap-3">
                 <img src={logo} alt="logo" className="w-20 h-20" />

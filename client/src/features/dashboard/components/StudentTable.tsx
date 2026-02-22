@@ -13,9 +13,9 @@ export default function StudentTable() {
     return (
         <div className="p-4">
             {/* <!-- Header --> */}
-            <span className="flex items-center justify-between">
+            <span className="flex items-center justify-between gap-4">
                 <h1 className="text-2xl font-bold text-slate-800">Campus Activity Log</h1>
-                <span className="text-sm text-slate-500">
+                <span className="text-sm text-slate-500 bg-green-100 py-2 px-3 rounded-2xl">
                     <Circle style={{ fontSize: '.5rem' }} className="text-green-400 mr-1" />
                     <span>Live Monitoring</span>
                 </span>
