@@ -18,13 +18,13 @@ export type User = {
 };
 
 export interface StudentProps {
-  _id: string;
+  _id?: string;
   first_name: string;
   last_name: string;
   education: { category: string; program: string; year: string };
   card_id: string;
   student_id: string;
-  display_photo: string;
+  display_photo?: File | string;
   guardian?: { notification: 'on' | 'off' };
 }
 
