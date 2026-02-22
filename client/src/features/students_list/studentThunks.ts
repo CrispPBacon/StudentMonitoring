@@ -22,31 +22,30 @@ export const fetchStudents = createAsyncThunk<StudentProps[] | null>(
 export const addStudent = createAsyncThunk<
   StudentProps,
   {
-    firstName: string;
-    lastName: string;
-    studentID: string;
-    cardID: string;
-    program: string;
-    year: string;
-    student_display_photo?: File;
+    first_name: string;
+    last_name: string;
+    student_id: string;
+    card_id: string;
+    display_photo?: File | null | string;
   }
 >('user/loginUser', async (credentials, thunkAPI) => {
   try {
     const formData = new FormData();
-    formData.append('firstName', credentials.firstName);
-    formData.append('lastName', credentials.lastName);
-    formData.append('studentID', credentials.studentID);
-    formData.append('card_id', credentials.cardID);
-    formData.append('program', credentials.program);
-    formData.append('year', credentials.year);
+    Object.entries(credentials).forEach(([key, val]) => {
+      if (val instanceof File) {
+        formData.append(key, val);
+      } else if (typeof val === 'string') {
+        formData.append(key, val);
+        console.log(key, val);
+      } else if (val) {
+        console.log(key, val);
+        formData.append(key, JSON.stringify(val));
+      }
+    });
 
-    if (credentials?.student_display_photo) {
-      formData.append(
-        'student_display_photo',
-        credentials.student_display_photo,
-      );
-    }
+    console.log(Object.fromEntries(formData.entries()));
     const { data } = await api.post<StudentProps>('/api/student', formData);
+    console.log(data);
     return data;
   } catch (err) {
     const error = err as AxiosError<{ error: { message: string } }>;
