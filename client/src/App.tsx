@@ -1,8 +1,12 @@
 import { Route, Routes } from "react-router-dom"
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import ProtectedRoute from "./components/layout/ProtectedRoute"
 import PublicRoute from "./components/layout/PublicRoute"
+import { useAppDispatch } from "./hooks/reduxHooks";
+import { useSocket } from "./hooks/useSocket";
+import { addAttendanceLog } from "./features/attendance/attendanceSlice";
+import type { AttendanceProps } from "./lib/types";
 
 // Lazy load the components
 const AppWrapper = React.lazy(() => import("./components/layout/AppWrapper"));
@@ -12,8 +16,24 @@ const Attendance = React.lazy(() => import("./pages/Attendance"));
 const Dashboard = React.lazy(() => import("./pages/Dashboard"));
 const DisplayLog = React.lazy(() => import("./pages/DisplayLog"));
 const Login = React.lazy(() => import("./pages/Login"));
+const StudentList = React.lazy(() => import("./pages/StudentList"));
 
 export default function App() {
+  const dispatch = useAppDispatch()
+  const { socket } = useSocket();
+
+  useEffect(() => {
+    const handleAttendance = (data: AttendanceProps) => {
+      if (!data) return;
+      dispatch(addAttendanceLog(data))
+    }
+    socket.on("attendance", handleAttendance);
+
+    return () => {
+      socket.off("attendance", handleAttendance);
+    }
+  }, [socket, dispatch])
+
   return (
     <Routes>
       {/* ACCESSIBLE IF LOGGED IN */}
@@ -21,7 +41,7 @@ export default function App() {
         <Route element={<AppWrapper />}>
           <Route path="/" element={<Dashboard />} />
           <Route path="/attendance" element={<Attendance />} />
-          <Route path="/students" element={<h1>HELLO</h1>} />
+          <Route path="/students" element={<StudentList />} />
         </Route>
       </Route>
 
