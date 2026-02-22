@@ -42,6 +42,12 @@ export default function AddStudentForm() {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
+        if (!firstName || !lastName || !studentID || !cardID) {
+            toast.error("Please fill in all required fields.")
+            return;
+        }
+
         const [first_name, last_name, student_id, card_id, display_photo] = [firstName, lastName, studentID, cardID, displayPhoto]
 
         let category = "basic"
