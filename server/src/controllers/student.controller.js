@@ -1,29 +1,19 @@
-import { addStudent, getStudents } from '../services/student.service.js';
+import { getStudents } from '../services/student.service.js';
 import { BadRequestError } from '../utils/errors.js';
 
 export async function CreateStudent(req, res, next) {
   try {
-    const { firstName, lastName, studentID, program, year, card_id } =
-      req.body || {};
     const finger_id = 0;
-    const data = {
-      first_name: firstName,
-      last_name: lastName,
-      student_id: studentID,
-      education: {
-        category: program == 'grade' ? 'basic' : 'college',
-        program,
-        year,
-      },
-      finger_id,
-      card_id,
-    };
+    // const { first_name, last_name, student_id, card_id } = req.body;
+    const education = JSON.parse(req.body.education);
+    const data = { ...req.body, education, finger_id };
 
     if (req?.file) data['display_photo'] = req.file.filename;
 
-    const result = await addStudent(data);
+    console.log(data);
 
-    return res.status(200).json(result);
+    // const result = await addStudent(data);
+    return res.status(200).json(data);
   } catch (error) {
     next(error);
   }
