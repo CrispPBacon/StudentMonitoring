@@ -43,7 +43,6 @@ export async function AuthLogout(req, res, next) {
 export async function RefreshAuth(req, res, next) {
   try {
     const user = await getUserBySession(req.session);
-    console.log(req.body, req.session);
     if (!user) {
       req.session.destroy();
       res.clearCookie('connect.sid');
