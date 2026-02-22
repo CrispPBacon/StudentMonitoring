@@ -9,18 +9,9 @@ import { Input } from "@/components/ui/input";
 
 import { useAppDispatch } from "@/hooks/reduxHooks";
 import { addStudent } from "@/features/students_list";
+import type { StudentProps } from "@/lib/types";
 
 
-
-interface DataProps {
-    firstName: string;
-    lastName: string;
-    studentID: string;
-    program: string;
-    year: string;
-    student_display_photo?: File | undefined;
-    cardID: string;
-}
 
 
 export default function AddStudentForm() {
@@ -33,7 +24,7 @@ export default function AddStudentForm() {
     const [guardianPhoneNumber, setGuardianPhoneNumber] = useState('')
     const [guardianEmail, setGuardianEmail] = useState('')
 
-    const [image, setImage] = useState<File | null>(null)
+    const [displayPhoto, setDisplayPhoto] = useState<File | null>(null)
     const fileInputRef = useRef(null);
 
     const dispatch = useAppDispatch();
@@ -46,19 +37,29 @@ export default function AddStudentForm() {
             toast.error("Please upload a valid image file.")
             return;
         }
-        setImage(file);
+        setDisplayPhoto(file);
     };
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // if (!image) return alert("Select a file first");
-        const data: DataProps = {
-            firstName, lastName, studentID, program, year, cardID
+        const [first_name, last_name, student_id, card_id, display_photo] = [firstName, lastName, studentID, cardID, displayPhoto]
+
+        let category = "basic"
+        const courses = ['bscs', 'bsit', 'bsed', 'bsba']
+        if (courses.includes(program)) category = "college";
+        const education: StudentProps['education'] = { category, year, program }
+
+
+        let studentData: StudentProps = {
+            first_name,
+            last_name,
+            education,
+            student_id,
+            card_id,
         }
+        if (display_photo instanceof File) studentData = { ...studentData, display_photo }
 
-
-        if (image) data['student_display_photo'] = image
-        dispatch(addStudent(data))
+        dispatch(addStudent(studentData))
         toast.success("Adding New Student...")
     }
     return (
