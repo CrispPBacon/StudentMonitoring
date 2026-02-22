@@ -21,6 +21,7 @@ export interface StudentProps {
   _id?: string;
   first_name: string;
   last_name: string;
+  email?: string;
   education: { category: string; program: string; year: string };
   card_id: string;
   student_id: string;

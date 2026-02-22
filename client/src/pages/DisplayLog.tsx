@@ -68,7 +68,7 @@ export default function DisplayLog() {
             {/* CARD */}
             <div className="2xl:px-0 md:px-5 w-full flex justify-center items-center gap-10">
                 {log ? <h1 className={`${log.type == "entry" ? "text-green-400 bg-green-100" : "bg-red-100 text-red-400"} p-3 text-7xl uppercase tracking-widest`}>{log.type == "entry" ? "Welcome" : "Goodbye"}</h1> : null}
-                {log ? <CardID student_id={(log?.student.student_id || "N/A")} type={log?.type} program={log?.student.education.program || "N/A"} display_photo={log?.student.display_photo} /> : null}
+                {log ? <CardID student_id={(log?.student.student_id || "N/A")} type={log?.type} program={log?.student.education.program || "N/A"} display_photo={typeof log?.student.display_photo == "string" ? log?.student.display_photo : `https://avatar.oxro.io/avatar.svg?name=${log.student.first_name}+${log.student.last_name}&background=ff6b6b&caps=3`} /> : null}
                 {log ? <h1 className={`${log.type == "entry" ? "text-green-400 bg-green-100" : "bg-red-100 text-red-400"} p-3 text-7xl uppercase tracking-widest`}>Student</h1> : null}
             </div>
         </div>
