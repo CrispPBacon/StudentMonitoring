@@ -25,6 +25,7 @@ export interface StudentProps {
   education: { category: string; program: string; year: string };
   card_id: string;
   student_id: string;
+  finger_id?: string;
   display_photo?: File | string;
   guardian?: { notification: 'on' | 'off' };
 }
