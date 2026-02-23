@@ -9,15 +9,16 @@ import { getTodayDateRange } from '../utils/dateRange.js';
 /* <--- Attendance Controller ---> */
 export async function EntryLog(req, res, next) {
   try {
-    let { card_id } = req.body ?? {};
+    let { card_id, finger_id } = req.body ?? {};
     if (card_id.includes(' ')) card_id = card_id.replaceAll(' ', '_');
     if (!card_id) return res.sendStatus(401);
-    const finger_id = 1;
-    if (finger_id <= 0) console.log('ok');
-    console.log(card_id);
+    // if (finger_id <= 0) return res.sendStatus(401);
+    console.log(card_id, finger_id);
 
     const student = await getStudentByCardId(card_id);
     if (!student) return res.sendStatus(401);
+    // if (!student?.finger_id) return res.sendStatus(401);
+    // if (student.finger_id != finger_id) return res.sendStatus(401);
 
     // Silent ignore for double tap
     const { log, ignored } = await logStudentEntry(student._id);
@@ -35,7 +36,6 @@ export async function EntryLog(req, res, next) {
       type,
       createdAt,
     };
-    console.log(attendanceData);
 
     getIO().emit('attendance', attendanceData);
     return res.sendStatus(200);
