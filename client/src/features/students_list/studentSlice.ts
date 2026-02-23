@@ -5,12 +5,14 @@ import type { ErrorProps, StudentProps } from '@/lib/types';
 interface StudentState {
   students: StudentProps[];
   isLoading: boolean;
+  isRequestSent: boolean;
   error: ErrorProps | null;
 }
 
 const initialState: StudentState = {
   students: [],
   isLoading: true,
+  isRequestSent: false,
   error: null,
 };
 
@@ -28,15 +30,18 @@ const studentSlice = createSlice({
       //   STUDENTS
       .addCase(fetchStudents.pending, (state) => {
         state.isLoading = true;
+        state.isRequestSent = false;
         state.error = null;
       })
       .addCase(fetchStudents.fulfilled, (state, action) => {
         state.students = action.payload || [];
         state.isLoading = false;
+        state.isRequestSent = true;
       })
       .addCase(fetchStudents.rejected, (state, action) => {
         state.students = [];
         state.isLoading = false;
+        state.isRequestSent = true;
         state.error = action.payload as ErrorProps;
       })
 

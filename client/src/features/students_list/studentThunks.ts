@@ -3,21 +3,22 @@ import api from '@/lib/api';
 import type { AxiosError } from 'axios';
 import type { StudentProps } from '@/lib/types';
 
-export const fetchStudents = createAsyncThunk<StudentProps[] | null>(
-  'student/fetchStudents',
-  async (_, thunkAPI) => {
-    try {
-      const { data } = await api.get<StudentProps[]>('/api/student/all');
-      return data;
-    } catch (err) {
-      const error = err as AxiosError<{ error: { message: string } }>;
-      console.log(error?.response?.data?.error);
-      return thunkAPI.rejectWithValue(
-        error.response?.data?.error || 'Login failed',
-      );
-    }
-  },
-);
+export const fetchStudents = createAsyncThunk<
+  StudentProps[] | null,
+  { page?: number } | undefined
+>('student/fetchStudents', async (_, thunkAPI) => {
+  try {
+    // console.log(credentials);
+    const { data } = await api.get<StudentProps[]>('/api/student');
+    return data;
+  } catch (err) {
+    const error = err as AxiosError<{ error: { message: string } }>;
+    console.log(error?.response?.data?.error);
+    return thunkAPI.rejectWithValue(
+      error.response?.data?.error || 'Login failed',
+    );
+  }
+});
 
 export const addStudent = createAsyncThunk<
   StudentProps,
