@@ -1,4 +1,4 @@
-import { getStudents } from '../services/student.service.js';
+import { addStudent, getStudents } from '../services/student.service.js';
 import { BadRequestError } from '../utils/errors.js';
 
 export async function CreateStudent(req, res, next) {
@@ -12,8 +12,8 @@ export async function CreateStudent(req, res, next) {
 
     console.log(data);
 
-    // const result = await addStudent(data);
-    return res.status(200).json(data);
+    const result = await addStudent(data);
+    return res.status(200).json(result);
   } catch (error) {
     next(error);
   }

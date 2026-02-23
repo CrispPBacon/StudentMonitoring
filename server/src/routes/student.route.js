@@ -9,8 +9,7 @@ import upload from '../config/multer.js';
 
 const router = express.Router();
 
-router.route('/student/all').get(GetAllStudents);
-
+router.route('/student').get(GetAllStudents);
 router.route('/student').post(upload.single('display_photo'), CreateStudent);
 
 // UPDATE DISPLAYP PHOTO
