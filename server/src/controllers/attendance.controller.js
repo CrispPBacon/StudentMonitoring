@@ -44,20 +44,35 @@ export async function EntryLog(req, res, next) {
   }
 }
 
-export async function GetAttendanceLog(_, res, next) {
+export async function GetAttendanceLog(req, res, next) {
   try {
-    const data = await getAllAttendanceLog();
-    return res.status(200).json(data);
-  } catch (error) {
-    next(error);
-  }
-}
+    let query = {};
 
-export async function GetTodayAttendanceLog(_, res, next) {
-  try {
-    const { startOfDayPH, endOfDayPH } = getTodayDateRange();
-    const query = { createdAt: { $gte: startOfDayPH, $lte: endOfDayPH } };
-    const data = await getAllAttendanceLog(query);
+    const filter = req.query.filter;
+    const page = req.query.page;
+    const ITEMS_PER_PAGE = req.query.limit || 20;
+
+    console.log(page, filter);
+
+    if (filter == 'today') {
+      const { startOfDayPH, endOfDayPH } = getTodayDateRange();
+      query = { createdAt: { $gte: startOfDayPH, $lte: endOfDayPH } };
+    }
+
+    const { attendance, count } = await getAllAttendanceLog(
+      query,
+      ITEMS_PER_PAGE,
+      page
+    );
+    const pageCount = Math.floor(count / ITEMS_PER_PAGE);
+
+    const data = {
+      pagination: {
+        pageCount,
+        count,
+      },
+      attendance,
+    };
     return res.status(200).json(data);
   } catch (error) {
     next(error);

@@ -12,11 +12,23 @@ async function getAttendanceLog(student) {
   return attendance || {};
 }
 
-export async function getAllAttendanceLog(query = null) {
-  const attendance = await Attendance.find(query || {})
+export async function getAllAttendanceLog(query = {}, limit = 0, page = 0) {
+  let skip = 0;
+  const countQuery = Attendance.estimatedDocumentCount(query);
+  let attendanceQuery = Attendance.find(query)
     .sort({ createdAt: -1 })
     .populate('student');
-  return attendance || [];
+
+  if (page) {
+    skip = (page - 1) * limit;
+  }
+
+  if (limit && page) attendanceQuery = attendanceQuery.limit(limit).skip(skip);
+
+  const [attendance, count] = await Promise.all([attendanceQuery, countQuery]);
+  const result = { attendance, count };
+
+  return result || {};
 }
 
 export async function logStudentEntry(student_id) {
