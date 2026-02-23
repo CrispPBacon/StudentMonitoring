@@ -1,6 +1,7 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import { addStudent, fetchStudents } from './studentThunks';
+import { addStudent, fetchStudents, updateStudent } from './studentThunks';
 import type { ErrorProps, StudentProps } from '@/lib/types';
+import { toast } from 'sonner';
 
 interface StudentState {
   students: StudentProps[];
@@ -57,6 +58,23 @@ const studentSlice = createSlice({
       .addCase(addStudent.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as ErrorProps;
+      })
+
+      .addCase(updateStudent.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(updateStudent.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as ErrorProps;
+        toast.error(state.error.message);
+      })
+      .addCase(updateStudent.fulfilled, (state, action) => {
+        toast.success('Student update success');
+        console.log(action.payload);
+        state.students = state.students.map((student) =>
+          student._id === action.payload._id ? action.payload : student,
+        );
       });
   },
 });

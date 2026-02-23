@@ -15,7 +15,7 @@ export const fetchStudents = createAsyncThunk<
     const error = err as AxiosError<{ error: { message: string } }>;
     console.log(error?.response?.data?.error);
     return thunkAPI.rejectWithValue(
-      error.response?.data?.error || 'Login failed',
+      error.response?.data?.error || 'Fetch students failed',
     );
   }
 });
@@ -29,7 +29,7 @@ export const addStudent = createAsyncThunk<
     card_id: string;
     display_photo?: File | null | string;
   }
->('user/loginUser', async (credentials, thunkAPI) => {
+>('student/addStudent', async (credentials, thunkAPI) => {
   try {
     const formData = new FormData();
     Object.entries(credentials).forEach(([key, val]) => {
@@ -52,7 +52,58 @@ export const addStudent = createAsyncThunk<
     const error = err as AxiosError<{ error: { message: string } }>;
     console.log(error?.response?.data?.error);
     return thunkAPI.rejectWithValue(
-      error.response?.data?.error || 'Login failed',
+      error.response?.data?.error || 'Add Student failed',
+    );
+  }
+});
+
+export const updateStudent = createAsyncThunk<
+  StudentProps,
+  {
+    _id: string;
+    first_name: string;
+    last_name: string;
+    student_id: string;
+    card_id: string;
+    finger_id: string;
+    education: StudentProps['education'];
+    display_photo?: File | null | string;
+  }
+>('student/updateStudent', async (credentials, thunkAPI) => {
+  try {
+    const {
+      first_name,
+      last_name,
+      education,
+      student_id,
+      card_id,
+      finger_id,
+      _id,
+    } = credentials;
+
+    console.log(
+      first_name,
+      last_name,
+      education,
+      student_id,
+      card_id,
+      finger_id,
+      education,
+      _id,
+    );
+
+    const { data } = await api.post<StudentProps>(
+      `/api/student/${_id}`,
+      credentials,
+    );
+    // console.log(data);
+
+    return data;
+  } catch (err) {
+    const error = err as AxiosError<{ error: { message: string } }>;
+    console.log(error?.response?.data?.error);
+    return thunkAPI.rejectWithValue(
+      error.response?.data?.error || 'Update failed',
     );
   }
 });

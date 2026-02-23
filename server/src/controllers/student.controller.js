@@ -1,5 +1,21 @@
-import { addStudent, getStudents } from '../services/student.service.js';
+import {
+  addStudent,
+  getStudents,
+  updateStudentByID,
+} from '../services/student.service.js';
 import { BadRequestError } from '../utils/errors.js';
+
+export async function UpdateStudent(req, res, next) {
+  try {
+    const { id } = req.params || {};
+    const data = req.body || {};
+    const { _id, ...update } = data;
+    const student = await updateStudentByID(id == _id ? id : '', update);
+    return res.status(200).json(student);
+  } catch (error) {
+    next(error);
+  }
+}
 
 export async function CreateStudent(req, res, next) {
   try {

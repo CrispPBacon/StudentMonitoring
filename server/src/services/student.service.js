@@ -1,6 +1,14 @@
 import Student from '../models/student.model.js';
 import mongoose from 'mongoose';
 
+/* <--- UPDATE STUDENT DATA ---> 
+    NOTE: Register Student to Database
+*/
+export async function updateStudentByID(id, update) {
+  const student = await Student.findByIdAndUpdate(id, update, { new: true });
+  return student;
+}
+
 /* <--- ADD STUDENT ---> 
     NOTE: Register Student to Database
 */

@@ -2,6 +2,7 @@ import express from 'express';
 import {
   CreateStudent,
   GetAllStudents,
+  UpdateStudent,
   UploadDisplayPhoto,
 } from '../controllers/student.controller.js';
 
@@ -11,6 +12,9 @@ const router = express.Router();
 
 router.route('/student').get(GetAllStudents);
 router.route('/student').post(upload.single('display_photo'), CreateStudent);
+router
+  .route('/student/:id')
+  .post(upload.single('display_photo'), UpdateStudent);
 
 // UPDATE DISPLAYP PHOTO
 router

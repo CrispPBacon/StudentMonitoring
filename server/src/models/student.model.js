@@ -35,6 +35,11 @@ const StudentSchema = new mongoose.Schema(
       uppercase: true,
       trim: true,
     },
+    finger_id: {
+      type: String,
+      uppercase: true,
+      trim: true,
+    },
     education: {
       category: {
         type: String,
