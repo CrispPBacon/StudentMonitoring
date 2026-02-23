@@ -38,12 +38,11 @@ void loop() {
     }
 
     // INFO: Fingerprint Reading.
-    // int fingerID = readFingerprint();
-    // if (fingerID != -1) {
-    //   Serial.print("Fingerprint matched with ID: ");
-    //   Serial.println(fingerID);
-    // }
-    int fingerID = -1;
+    int fingerID = readFingerprint();
+    if (fingerID != -1) {
+      Serial.print("Fingerprint matched with ID: ");
+      Serial.println(fingerID);
+    }
     // INFO: Sends HTTP Post request to the server.
     if (sendAttendance(cardUID, fingerID)) { 
       blinkLed();
