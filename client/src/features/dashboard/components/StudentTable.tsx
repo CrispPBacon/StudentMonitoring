@@ -21,10 +21,10 @@ export default function StudentTable() {
                 </span>
             </span>
             {/* <!-- Student Table List --> */}
-            <div className="grid grid-cols-1 text-sm mt-4 overflow-y-auto h-80 ">
+            <div className=" text-sm mt-4 overflow-y-auto h-80 ">
                 {attendanceLog.length > 0 ? latestFive.map(val => {
                     const { createdAt, type, student } = val
-                    const { first_name, last_name, student_id } = student
+                    const { first_name, last_name, student_id } = student || {}
                     return <StudentData key={val._id} first_name={first_name} last_name={last_name} student_id={student_id} createdAt={createdAt} type={type} />
                 }) : null}
 
@@ -40,7 +40,8 @@ interface StudentDataProps {
     createdAt: string
     type: string
 }
-export function StudentData({ student_id, first_name, last_name, createdAt, type }: StudentDataProps) {
+export function StudentData(student: StudentDataProps) {
+    const { student_id, first_name, last_name, createdAt, type } = student || {}
     const { hour, minute, unit } = formatPHDate(createdAt)
     return (
         <div className="flex items-center justify-between p-5 hover:bg-slate-50 animate-entry">
