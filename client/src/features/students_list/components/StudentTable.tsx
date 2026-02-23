@@ -16,7 +16,7 @@ export default function StudentTable() {
     return (
         <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
-                <thead className="bg-slate-50 border-b border-slate-200">
+                <thead className="sticky top-0 bg-slate-50 border-b border-slate-200">
                     <tr>
                         <th className="p-4 text-sm font-semibold text-slate-600">Student</th>
                         <th className="p-4 text-sm font-semibold text-slate-600">
