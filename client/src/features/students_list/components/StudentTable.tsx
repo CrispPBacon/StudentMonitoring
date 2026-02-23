@@ -142,8 +142,9 @@ function UpdateStudentForm(props: FormProps) {
     // const { first_name, last_name, education, student_id, card_id } = student
 
 
-    const { setOpen, ...student } = props
+    const setOpen = props.setOpen
     useEffect(() => {
+        const { ...student } = props
         const handleDataChange = () => {
             const { first_name, last_name, education, student_id, card_id, finger_id } = student
             setFirstName(toTitleCase(first_name))
@@ -154,7 +155,7 @@ function UpdateStudentForm(props: FormProps) {
             setFingerID(finger_id || '')
         }
         handleDataChange()
-    }, [student])
+    }, [props])
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -170,6 +171,7 @@ function UpdateStudentForm(props: FormProps) {
 
 
     const handleSubmit = ((e: FormEvent<HTMLFormElement>) => {
+        const { ...student } = props
         e.preventDefault();
         const data = {
             _id: student._id || '',
