@@ -18,7 +18,7 @@ void loop() {
   connectToInternet();
 
   char cardUID[24];
-  
+  Serial.println("Waiting for card...");
   if (nfcReadCard(cardUID, sizeof(cardUID))) {
     Serial.print("Card UID: ");
     Serial.println(cardUID);
