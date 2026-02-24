@@ -1,5 +1,10 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import { addStudent, fetchStudents, updateStudent } from './studentThunks';
+import {
+  addStudent,
+  deleteStudent,
+  fetchStudents,
+  updateStudent,
+} from './studentThunks';
 import type { ErrorProps, StudentProps } from '@/lib/types';
 import { toast } from 'sonner';
 
@@ -60,6 +65,7 @@ const studentSlice = createSlice({
         state.error = action.payload as ErrorProps;
       })
 
+      // Update Student
       .addCase(updateStudent.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -75,6 +81,24 @@ const studentSlice = createSlice({
         state.students = state.students.map((student) =>
           student._id === action.payload._id ? action.payload : student,
         );
+        state.isLoading = false;
+      })
+
+      // Delete Student Record
+      .addCase(deleteStudent.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(deleteStudent.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as ErrorProps;
+        toast.error(state.error.message);
+      })
+      .addCase(deleteStudent.fulfilled, (state, action) => {
+        state.students = state.students.filter(
+          (student) => action.payload._id != student._id,
+        );
+        state.isLoading = false;
       });
   },
 });
