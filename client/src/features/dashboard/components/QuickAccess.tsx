@@ -11,7 +11,8 @@ import ButtonDialog from "@/features/dashboard/components/ButtonDialog";
 import AddStudentForm from "./forms/AddStudentForm";
 
 export default function QuickAccess() {
-    const [open, setOpen] = useState(false);
+    const [openAddStudentForm, setOpenAddStudentForm] = useState(false);
+
     return (
         <div className="mb-1 bg-white p-5 rounded-xl shadow-md">
             <strong>Quick Access</strong>
@@ -19,15 +20,15 @@ export default function QuickAccess() {
                 className="mt-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
             >
                 <ButtonDialog
-                    open={open}
-                    onOpenChange={setOpen}
+                    open={openAddStudentForm}
+                    onOpenChange={setOpenAddStudentForm}
                     className="hover:text-purple-300 hover:bg-slate-800 bg-slate-200 text-slate-800 font-medium py-5 px-4 sm:px-5 rounded-md flex items-center gap-3"
                     icon={PersonAddAltRounded}
                     placeholder="Add Student"
                     title="Add New Student"
                     description="Fill in the required details to create a new student record."
                 >
-                    <AddStudentForm />
+                    <AddStudentForm setOpen={setOpenAddStudentForm} />
                 </ButtonDialog>
                 <ButtonDialog
                     className="hover:bg-slate-800 bg-slate-200 text-slate-800 hover:text-yellow-300 font-medium py-5 px-4 sm:px-5 rounded-md flex items-center gap-3"
