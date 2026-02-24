@@ -17,9 +17,9 @@ USER AUTHENTICATION
 STUDENTS MANAGEMENT
 ----- Functional -----
 ✅ > Full CRUD Operations (Create, Read, Update, Delete) for Student Records
-> Student Profile with Photo Upload
-> Semester Enrollment Validation
-> Add, Update, Suspend Student Card ID
+✅ > Student Profile with Photo Upload
+❌ > Semester Enrollment Validation
+✅ > Add, Update, Suspend Student Card ID
 > Advanced Student Record Filtering and Search
 > Bulk Student Import/Export (CSV/Excel)
 > Archive Inactive or Graduated Students
