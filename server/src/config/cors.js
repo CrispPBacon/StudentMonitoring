@@ -1,6 +1,9 @@
+import { getLocalIPv4 } from '../utils/getIPAddress.js';
+
+const localIP = getLocalIPv4();
 const whitelist = process.env.ALLOWED_ORIGINS
   ? process.env.ALLOWED_ORIGINS.split(',')
-  : ['http://localhost:5173', 'http://localhost'];
+  : ['http://localhost:5173', `http://${localIP}:5173`];
 
 console.log(whitelist);
 export const corsConfig = {

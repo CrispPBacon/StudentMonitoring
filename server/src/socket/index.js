@@ -1,11 +1,12 @@
 import { Server } from 'socket.io';
 import { registerHandlers } from './handlers.js';
+import { getLocalIPv4 } from '../utils/getIPAddress.js';
 
 let io;
-
+const localIP = getLocalIPv4();
 const whitelist = process.env.ALLOWED_ORIGINS
   ? process.env.ALLOWED_ORIGINS.split(',')
-  : ['http://localhost:5173'];
+  : ['http://localhost:5173', `http://${localIP}:${5173}`];
 
 export function initSocket(server) {
   io = new Server(server, {

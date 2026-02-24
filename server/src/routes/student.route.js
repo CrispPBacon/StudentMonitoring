@@ -1,6 +1,7 @@
 import express from 'express';
 import {
   CreateStudent,
+  DeleteStudent,
   GetAllStudents,
   UpdateStudent,
   UploadDisplayPhoto,
@@ -10,6 +11,7 @@ import upload from '../config/multer.js';
 
 const router = express.Router();
 
+router.route('/student/:id').delete(DeleteStudent);
 router.route('/student').get(GetAllStudents);
 router.route('/student').post(upload.single('display_photo'), CreateStudent);
 router

@@ -1,9 +1,24 @@
 import {
   addStudent,
+  deleteStudentByID,
   getStudents,
   updateStudentByID,
 } from '../services/student.service.js';
-import { BadRequestError } from '../utils/errors.js';
+import { BadRequestError, NotFoundError } from '../utils/errors.js';
+
+export async function DeleteStudent(req, res, next) {
+  try {
+    const id = req.params.id;
+    if (!id) throw new BadRequestError('Invalid student object ID');
+
+    const result = await deleteStudentByID(id);
+
+    if (!result) throw new NotFoundError('Student Record not found');
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+}
 
 export async function UpdateStudent(req, res, next) {
   try {
