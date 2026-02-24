@@ -71,32 +71,57 @@ export const updateStudent = createAsyncThunk<
   }
 >('student/updateStudent', async (credentials, thunkAPI) => {
   try {
-    const {
-      first_name,
-      last_name,
-      education,
-      student_id,
-      card_id,
-      finger_id,
-      _id,
-    } = credentials;
+    // const {
+    //   first_name,
+    //   last_name,
+    //   education,
+    //   student_id,
+    //   card_id,
+    //   finger_id,
+    //   _id,
+    // } = credentials;
 
-    console.log(
-      first_name,
-      last_name,
-      education,
-      student_id,
-      card_id,
-      finger_id,
-      education,
-      _id,
-    );
+    // console.log(
+    //   first_name,
+    //   last_name,
+    //   education,
+    //   student_id,
+    //   card_id,
+    //   finger_id,
+    //   education,
+    //   _id,
+    // );
 
     const { data } = await api.post<StudentProps>(
-      `/api/student/${_id}`,
+      `/api/student/${credentials._id}`,
       credentials,
     );
-    // console.log(data);
+
+    return data;
+  } catch (err) {
+    const error = err as AxiosError<{ error: { message: string } }>;
+    console.log(error?.response?.data?.error);
+    return thunkAPI.rejectWithValue(
+      error.response?.data?.error || 'Update failed',
+    );
+  }
+});
+
+export const deleteStudent = createAsyncThunk<
+  StudentProps,
+  {
+    _id: string;
+  }
+>('student/deleteStudent', async (credentials, thunkAPI) => {
+  try {
+    // const { data } = await api.post<StudentProps>(
+    //   `/api/student/${credentials._id}`,
+    //   credentials,
+    // );
+
+    const { data } = await api.delete<StudentProps>(
+      `/api/student/${credentials._id}`,
+    );
 
     return data;
   } catch (err) {
