@@ -8,7 +8,7 @@ const PublicRoute = () => {
     const dispatch = useAppDispatch()
 
     useEffect(() => {
-        console.log(user)
+        // console.log(user)
         if (!user) dispatch(fetchCurrentUser())
     }, [dispatch, user])
 
