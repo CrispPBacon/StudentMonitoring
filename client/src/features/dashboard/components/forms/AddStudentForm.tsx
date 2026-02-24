@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import React, { useRef, useState } from "react"
+import React, { useRef, useState, type Dispatch, type SetStateAction } from "react"
 
 import { DialogClose } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input";
@@ -13,8 +13,10 @@ import type { StudentProps } from "@/lib/types";
 
 
 
-
-export default function AddStudentForm() {
+interface AddStudentFormProps {
+    setOpen: Dispatch<SetStateAction<boolean>>
+}
+export default function AddStudentForm({ setOpen }: AddStudentFormProps) {
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
     const [studentID, setStudentID] = useState('')
@@ -67,6 +69,7 @@ export default function AddStudentForm() {
 
         dispatch(addStudent(studentData))
         toast.success("Adding New Student...")
+        setOpen(false)
     }
     return (
         <form onSubmit={handleSubmit}>
