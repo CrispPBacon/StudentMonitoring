@@ -2,7 +2,7 @@ import Student from '../models/student.model.js';
 import mongoose from 'mongoose';
 
 /* <--- UPDATE STUDENT DATA ---> 
-    NOTE: Register Student to Database
+    NOTE: Update Student Record in the Database
 */
 export async function updateStudentByID(id, update) {
   const student = await Student.findByIdAndUpdate(id, update, { new: true });
@@ -47,6 +47,12 @@ export async function getStudentByCardId(card_id) {
   );
   return student || null;
 }
+export async function getStudentByStudentId(student_id) {
+  const student = await Student.findOne({ student_id }).select(
+    '-guardian -updatedAt -__v'
+  );
+  return student || null;
+}
 export async function getStudents() {
   const students = await Student.find({}).select('-updatedAt -__v');
   return students;
@@ -63,6 +69,7 @@ export async function updateStudentCard(student_id, card_id) {
 /* <--- DELETE STUDENT INFORMATION ---> 
     NOTE: Delete Student ID Card Record.
 */
-export async function deleteStudentCard(student_id) {
-  return student_id;
+export async function deleteStudentByID(id) {
+  const result = await Student.findByIdAndDelete(id);
+  return result;
 }

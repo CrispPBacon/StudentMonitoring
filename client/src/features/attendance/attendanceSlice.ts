@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import { fetchAttendanceLog } from './attendanceThunks';
+import { AttendanceLog, fetchAttendanceLog } from './attendanceThunks';
 import type { AttendanceProps, ErrorProps } from '@/lib/types';
 import { getAttendanceToday } from '../dashboard/utils/getAttendanceToday';
 
@@ -30,7 +30,8 @@ const attendanceLogSlice = createSlice({
   initialState,
   reducers: {
     addAttendanceLog: (state, action: PayloadAction<AttendanceProps>) => {
-      state.attendanceLog.push(action.payload);
+      console.log(action.payload);
+      state.attendanceLog = [action.payload, ...state.attendanceLog];
       state.entryToday = getAttendanceToday(state.attendanceLog, 'entry');
       state.exitToday = getAttendanceToday(state.attendanceLog, 'exit');
       state.error = null;
@@ -54,7 +55,7 @@ const attendanceLogSlice = createSlice({
       })
       .addCase(fetchAttendanceLog.fulfilled, (state, action) => {
         const newLog = action.payload?.attendance || [];
-        console.log(newLog);
+        // console.log(newLog);
         // const log = [
         //   ...state.attendanceLog,
         //   ...newLog.filter(
@@ -74,6 +75,24 @@ const attendanceLogSlice = createSlice({
         state.isLoading = false;
         state.isRequestSent = true;
         state.error = action.payload as ErrorProps;
+      })
+
+      // MANUAL ATTENDANCE LOGGING
+      .addCase(AttendanceLog.pending, (state) => {
+        state.isLoading = true;
+        state.isRequestSent = false;
+        state.error = null;
+      })
+      .addCase(AttendanceLog.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isRequestSent = true;
+        state.error = action.payload as ErrorProps;
+      })
+      .addCase(AttendanceLog.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isRequestSent = true;
+
+        state.attendanceLog = [action.payload, ...state.attendanceLog];
       });
   },
 });

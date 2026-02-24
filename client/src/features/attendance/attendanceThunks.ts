@@ -34,3 +34,25 @@ export const fetchAttendanceLog = createAsyncThunk<
     );
   }
 });
+
+export const AttendanceLog = createAsyncThunk<
+  AttendanceProps,
+  { student_id: string } | undefined
+>('student/AttendanceLog', async (credentials, thunkAPI) => {
+  try {
+    // QUERY VALIDATIOn
+    const student_id = credentials?.student_id;
+    const endpoint = `/api/attendance/${student_id}`;
+    const { data } = await api.post<AttendanceProps>(endpoint);
+
+    console.log(data);
+
+    return data;
+  } catch (err) {
+    const error = err as AxiosError<{ error: { message: string } }>;
+    console.log(error?.response?.data?.error);
+    return thunkAPI.rejectWithValue(
+      error.response?.data?.error || 'Login failed',
+    );
+  }
+});

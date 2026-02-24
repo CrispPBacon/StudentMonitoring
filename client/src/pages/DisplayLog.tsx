@@ -1,12 +1,20 @@
 import bg from "@/assets/Letran Clock-in.png"
 import { useSocket } from "@/hooks/useSocket";
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"
 import { CardID, StatusIndicator } from "@/features/display_log";
 import type { AttendanceProps, } from "@/lib/types";
+import { backendUrl } from "@/lib/api";
+import { Login, PersonSearch } from "@mui/icons-material";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useAppDispatch } from "@/hooks/reduxHooks";
+import { AttendanceLog } from "@/features/attendance/attendanceThunks";
 
 
 
 export default function DisplayLog() {
+    const [inputShow, setInputShow] = useState(false)
+    const [studentID, setStudentID] = useState('')
     const [log, setLog] = useState<AttendanceProps | null>(null)
     const { socket, connected, } = useSocket();
     const serverStatus = connected ? "online" : "offline"
@@ -54,22 +62,37 @@ export default function DisplayLog() {
     }, [socket]);
 
 
+    const dispatch = useAppDispatch()
+
+    const handleSubmitID = () => {
+        if (!inputShow) return setInputShow(true)
+        dispatch(AttendanceLog({ student_id: studentID }))
+        console.log("Sent")
+        setInputShow(false)
+        setStudentID('')
+    }
+
     return (
-        <div style={{ backgroundImage: `url(${bg})` }} className="relative bg-fixed bg-no-repeat bg-cover 2xl:container 2xl:mx-auto min-h-dvh flex flex-col items-center justify-center">
+        <div style={{ backgroundImage: `url(${bg})` }} className="relative bg-fixed bg-no-repeat bg-cover 2xl:container 2xl:mx-auto min-h-dvh grid grid-cols-1 grid-rows-[3rem_1fr]">
             {/* TITLE */}
-            <div className="absolute top-0 flex w-full justify-end p-10 items-center">
+            <div className="flex w-full justify-end p-10 items-center">
                 {/* <h1 className="text-4xl font-extrabold text-slate-800 tracking-wider">Letran Clock-in</h1> */}
                 {/* DISPLAY STATUS */}
-                <div className="flex gap-5">
+                <div className="flex gap-5 z-20">
+                    <span className={`items-center relative ${!inputShow ? "hidden" : "flex"}`}>
+                        <PersonSearch className="absolute left-5" />
+                        <Input value={studentID} onChange={(e) => setStudentID(e.target.value)} type="text" placeholder="Enter your Student ID" className={`bg-slate-100 p-7 pl-14`} />
+                    </span>
+                    <Button variant="ghost" className="bg-yellow-100 text-yellow-400 hover:bg-yellow-200 hover:text-yellow-600  p-8 px-10 rounded-2xl" onClick={handleSubmitID}><Login /></Button>
                     <StatusIndicator label="Card Reader" status={"connected"} />
                     <StatusIndicator label="Server" status={serverStatus} />
                 </div>
             </div>
             {/* CARD */}
             <div className="2xl:px-0 md:px-5 w-full flex justify-center items-center gap-10">
-                {log ? <h1 className={`${log.type == "entry" ? "text-green-400 bg-green-100" : "bg-red-100 text-red-400"} p-3 text-7xl uppercase tracking-widest`}>{log.type == "entry" ? "Welcome" : "Goodbye"}</h1> : null}
-                {log ? <CardID student_id={(log?.student.student_id || "N/A")} type={log?.type} program={log?.student.education.program || "N/A"} display_photo={typeof log?.student.display_photo == "string" ? log?.student.display_photo : `https://avatar.oxro.io/avatar.svg?name=${log.student.first_name}+${log.student.last_name}&background=ff6b6b&caps=3`} /> : null}
-                {log ? <h1 className={`${log.type == "entry" ? "text-green-400 bg-green-100" : "bg-red-100 text-red-400"} p-3 text-7xl uppercase tracking-widest`}>Student</h1> : null}
+                {log ? <h1 className={`${log.type == "entry" ? "text-green-400 bg-green-100" : "bg-red-100 text-red-400"} z-20 p-3 text-7xl uppercase tracking-widest`}>{log.type == "entry" ? "Welcome" : "Goodbye"}</h1> : null}
+                {log ? <CardID student_id={(log?.student.student_id || "N/A")} type={log?.type} program={log?.student.education.program || "N/A"} display_photo={typeof log?.student.display_photo == "string" ? `${backendUrl}/display_photo/${log?.student.display_photo}` : `https://avatar.oxro.io/avatar.svg?name=${log.student.first_name}+${log.student.last_name}&background=ff6b6b&caps=3`} /> : null}
+                {log ? <h1 className={`${log.type == "entry" ? "text-green-400 bg-green-100" : "bg-red-100 text-red-400"} z-20 p-3 text-7xl uppercase tracking-widest`}>Student</h1> : null}
             </div>
         </div>
     )
