@@ -128,7 +128,7 @@ export const deleteStudent = createAsyncThunk<
     const error = err as AxiosError<{ error: { message: string } }>;
     console.log(error?.response?.data?.error);
     return thunkAPI.rejectWithValue(
-      error.response?.data?.error || 'Update failed',
+      error.response?.data?.error || 'Delete failed',
     );
   }
 });

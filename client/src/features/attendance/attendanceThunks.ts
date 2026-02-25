@@ -30,7 +30,7 @@ export const fetchAttendanceLog = createAsyncThunk<
     const error = err as AxiosError<{ error: { message: string } }>;
     console.log(error?.response?.data?.error);
     return thunkAPI.rejectWithValue(
-      error.response?.data?.error || 'Login failed',
+      error.response?.data?.error || 'Fetch Atendance failed',
     );
   }
 });
@@ -52,7 +52,7 @@ export const AttendanceLog = createAsyncThunk<
     const error = err as AxiosError<{ error: { message: string } }>;
     console.log(error?.response?.data?.error);
     return thunkAPI.rejectWithValue(
-      error.response?.data?.error || 'Login failed',
+      error.response?.data?.error || 'Attendance Log failed',
     );
   }
 });
