@@ -13,12 +13,20 @@ import { AttendanceLog } from "@/features/attendance/attendanceThunks";
 
 
 export default function DisplayLog() {
+    const [time, setTime] = useState(new Date())
     const [inputShow, setInputShow] = useState(false)
     const [studentID, setStudentID] = useState('')
     const [log, setLog] = useState<AttendanceProps | null>(null)
     const { socket, connected, } = useSocket();
     const serverStatus = connected ? "online" : "offline"
 
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setTime(new Date());
+        }, 1000);
+
+        return () => clearInterval(timer); // cleanup when component unmounts
+    }, []);
 
     useEffect(() => {
         const timerRef = { current: null as ReturnType<typeof setTimeout> | null };
@@ -73,9 +81,9 @@ export default function DisplayLog() {
     }
 
     return (
-        <div style={{ backgroundImage: `url(${bg})` }} className="relative bg-fixed bg-no-repeat bg-cover 2xl:container 2xl:mx-auto min-h-dvh grid grid-cols-1 grid-rows-[3rem_1fr]">
+        <div style={{ backgroundImage: `url(${bg})` }} className="relative bg-fixed bg-no-repeat bg-cover 2xl:container 2xl:mx-auto min-h-dvh grid grid-cols-1 grid-rows-[5rem_1fr]">
             {/* TITLE */}
-            <div className="flex w-full justify-end p-10 items-center">
+            <div className="overflow-hidden flex w-full justify-end p-10 items-center">
                 {/* <h1 className="text-4xl font-extrabold text-slate-800 tracking-wider">Letran Clock-in</h1> */}
                 {/* DISPLAY STATUS */}
                 <div className="flex gap-5 z-20">
@@ -83,9 +91,12 @@ export default function DisplayLog() {
                         <PersonSearch className="absolute left-5" />
                         <Input value={studentID} onChange={(e) => setStudentID(e.target.value)} type="text" placeholder="Enter your Student ID" className={`bg-slate-100 p-7 pl-14`} />
                     </span>
-                    <Button variant="ghost" className="bg-yellow-100 text-yellow-400 hover:bg-yellow-200 hover:text-yellow-600  p-8 px-10 rounded-2xl" onClick={handleSubmitID}><Login /></Button>
+                    <Button variant="ghost" className="bg-green-100 text-green-400 hover:bg-green-200 hover:text-green-600  p-8 px-10 rounded-2xl" onClick={handleSubmitID}><Login fontSize="large" /></Button>
                     <StatusIndicator label="Card Reader" status={"connected"} />
                     <StatusIndicator label="Server" status={serverStatus} />
+                    <span className="bg-blue-100 text-blue-900 font-bold text-2xl z-20 shadow-md flex items-center text-center px-5 py-2 rounded-sm">
+                        <h2>{time.toLocaleTimeString()}</h2>
+                    </span>
                 </div>
             </div>
             {/* CARD */}
