@@ -12,8 +12,20 @@ const AttendanceSchema = new mongoose.Schema(
     },
     type: {
       type: String,
-      enum: ['entry', 'exit', 'denied', 'unknown'],
+      enum: ['entry', 'exit'],
       default: 'entry',
+      required: true,
+    },
+    result: {
+      type: String,
+      enum: ['granted', 'denied'],
+      lowercase: true,
+      trim: true,
+    },
+    identity: {
+      type: String,
+      enum: ['verified', 'no_id', 'visitor', 'unrecognized'],
+      default: 'verified',
     },
   },
   { timestamps: true }

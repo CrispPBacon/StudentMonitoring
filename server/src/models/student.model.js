@@ -30,6 +30,19 @@ const StudentSchema = new mongoose.Schema(
       trim: true,
       required: [true, 'Student ID is required'],
     },
+    card: {
+      id: {
+        type: String,
+        uppercase: true,
+        trim: true,
+      },
+      status: {
+        type: String,
+        lowercase: true,
+        trim: true,
+        enum: ['active', 'inactive', 'graduated', 'suspended'],
+      },
+    },
     card_id: {
       type: String,
       uppercase: true,
@@ -52,13 +65,19 @@ const StudentSchema = new mongoose.Schema(
         type: String,
         lowercase: true,
         trim: true,
-        required: [true, 'Education program is required'],
+        required: [true, 'Program program is required'],
       },
       year: {
         type: String,
         lowercase: true,
         trim: true,
-        required: [true, 'Education year is required'],
+        required: [true, 'Year level is required'],
+      },
+      schoolYear: {
+        type: String,
+        lowercase: true,
+        trim: true,
+        // required: [true, 'School year is required'],
       },
     },
     guardian: {
