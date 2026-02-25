@@ -50,7 +50,7 @@ export function AttendanceRow({ student, type, createdAt }: AttendanceProps) {
     // console.log({ student, type, createdAt }, { first_name, last_name, education, student_id, card_id, display_photo })
 
     return (
-        <tr>
+        <tr className="animate-entry">
             <td className="p-4 flex items-center gap-3">
                 <div
                     className="overflow-hidden w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center font-semibold text-slate-600">
