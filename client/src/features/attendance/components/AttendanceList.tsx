@@ -20,7 +20,7 @@ export default function AttendanceList() {
     return (
         <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
-                <thead className="sticky top-0 bg-slate-50 border-b border-slate-200">
+                <thead className="z-20 sticky top-0 bg-slate-50 border-b border-slate-200">
                     <tr>
                         <th className="p-4 text-sm font-semibold text-slate-600">Student</th>
                         <th className="p-4 text-sm font-semibold text-slate-600">
