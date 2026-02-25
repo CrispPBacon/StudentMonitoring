@@ -114,9 +114,6 @@ export function PopOver(student: StudentProps) {
                     >
                         <DeleteStudentForm id={student._id || ''} setOpen={setOpenDeleteStudentForm} />
                     </ButtonDialog>
-                    {/* <Button variant="ghost" className='text-left'>View</Button> */}
-                    {/* <Button variant="ghost" className='text-left'>Edit</Button> */}
-                    {/* <Button variant="destructive" className='text-left bg-red-100 text-red-400 hover:text-red-600 hover:bg-red-200'>Delete</Button> */}
                 </div>
             </PopoverContent>
         </Popover>)
