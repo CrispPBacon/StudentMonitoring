@@ -12,7 +12,7 @@ const AttendanceSchema = new mongoose.Schema(
     },
     type: {
       type: String,
-      enum: ['entry', 'exit'],
+      enum: ['entry', 'exit', 'denied', 'unknown'],
       default: 'entry',
     },
   },
