@@ -85,23 +85,27 @@ const StudentSchema = new mongoose.Schema(
         type: String,
         lowercase: true,
         trim: true,
+        default: 'N/A',
       },
       last_name: {
         type: String,
         lowercase: true,
         trim: true,
+        default: 'N/A',
       },
       email: {
         type: String,
         lowercase: true,
         trim: true,
+        default: 'N/A',
       },
       phone_number: {
         type: Number,
+        default: 'N/A',
       },
       notification: {
         type: String,
-        enum: ['off', 'sms', 'email'],
+        enum: ['off', 'sms', 'email', 'both'],
         default: 'off',
       },
     },
