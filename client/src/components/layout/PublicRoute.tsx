@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '@/hooks/reduxHooks'
 import { useEffect } from 'react'
-import { fetchCurrentUser } from '@/features/authentication/userThunks'
+import { fetchCurrentUser } from '@/features/Authentication/userThunks'
 
 const PublicRoute = () => {
     const { user, isLoading } = useAppSelector((state) => state.user)
