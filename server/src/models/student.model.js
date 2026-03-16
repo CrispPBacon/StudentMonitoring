@@ -65,7 +65,7 @@ const StudentSchema = new mongoose.Schema(
         type: String,
         lowercase: true,
         trim: true,
-        required: [true, 'Program program is required'],
+        required: [true, 'Program is required'],
       },
       year: {
         type: String,
@@ -77,7 +77,17 @@ const StudentSchema = new mongoose.Schema(
         type: String,
         lowercase: true,
         trim: true,
-        // required: [true, 'School year is required'],
+      },
+      status: {
+        type: String,
+        lowercase: true,
+        trim: true,
+        default: 'enrolled',
+        enum: ['enrolled', 'not_enrolled', 'alumni', 'dropped'],
+      },
+      remarks: {
+        type: String,
+        trim: true,
       },
     },
     guardian: {
@@ -85,23 +95,21 @@ const StudentSchema = new mongoose.Schema(
         type: String,
         lowercase: true,
         trim: true,
-        default: 'N/A',
       },
       last_name: {
         type: String,
         lowercase: true,
         trim: true,
-        default: 'N/A',
       },
       email: {
         type: String,
         lowercase: true,
         trim: true,
-        default: 'N/A',
       },
       phone_number: {
-        type: Number,
-        default: 'N/A',
+        type: String,
+        lowercase: true,
+        trim: true,
       },
       notification: {
         type: String,
