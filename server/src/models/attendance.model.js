@@ -22,11 +22,6 @@ const AttendanceSchema = new mongoose.Schema(
       lowercase: true,
       trim: true,
     },
-    identity: {
-      type: String,
-      enum: ['verified', 'no_id', 'visitor', 'unrecognized'],
-      default: 'verified',
-    },
   },
   { timestamps: true }
 );
