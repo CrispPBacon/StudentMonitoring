@@ -14,16 +14,18 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^1.13.2",
+    "axios": "^1.13.6",
     "connect-mongodb-session": "^5.0.0",
     "cors": "^2.8.6",
     "dotenv": "^17.2.3",
+    "exceljs": "^4.4.0",
     "express": "^5.2.1",
     "express-session": "^1.19.0",
     "express-validator": "^7.3.1",
     "http-status-codes": "^2.3.0",
     "mongoose": "^9.1.4",
     "multer": "^2.0.2",
+    "nodemailer": "^8.0.1",
     "socket.io": "^4.8.3"
   },
   "devDependencies": {
@@ -37,5 +39,16 @@
   "engines": {
     "node": "22.18.0"
   },
-  "type": "module"
+  "type": "module",
+  "imports": {
+    "#config/*": "./src/config/*",
+    "#controllers/*": "./src/controllers/*",
+    "#middlewares/*": "./src/middlewares/*",
+    "#models/*": "./src/models/*",
+    "#routes/*": "./src/routes/*",
+    "#services/*": "./src/services/*",
+    "#utils/*": "./src/utils/*",
+    "#socket/*": "./src/socket/*",
+    "#root/*": "./src/*"
+  }
 }
