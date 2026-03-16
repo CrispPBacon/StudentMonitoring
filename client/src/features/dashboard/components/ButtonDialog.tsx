@@ -10,9 +10,10 @@ import {
 
 type ButtonDialogProps = {
     children: React.ReactNode
-    placeholder: string
+    placeholder: React.ReactNode
     icon?: React.ElementType
     className?: string
+    cardClassName?: string
     title?: string
     description?: string
 
@@ -30,6 +31,7 @@ export default function ButtonDialog({
     description,
     open,
     onOpenChange,
+    cardClassName,
 }: ButtonDialogProps) {
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
@@ -40,7 +42,7 @@ export default function ButtonDialog({
                 </button>
             </DialogTrigger>
 
-            <DialogContent>
+            <DialogContent className={cardClassName ? cardClassName : ''}>
                 {(title || description) && (
                     <DialogHeader>
                         {title && <DialogTitle>{title}</DialogTitle>}
