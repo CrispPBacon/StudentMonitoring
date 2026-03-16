@@ -1,5 +1,19 @@
 import Attendance from '../models/attendance.model.js';
 
+/* -<--- Attendance Service --->- */
+export async function logStudentEntry(student_id) {
+  // NOTE: GET COOLDOWN
+  const last_log = await getAttendanceLog(student_id);
+  if (isWithinCooldown(last_log)) return { ignored: true };
+
+  // NOTE: GET ATTENDANCE LOG
+  const type = getNextAttendanceType(last_log);
+  const log = await addAttendanceLog(student_id, type, last_log);
+
+  return { ignored: false, log };
+}
+
+/* -<--- Attendance Repository --->- */
 async function addAttendanceLog(student, type) {
   const attendance = new Attendance({ student, type });
   return attendance.save();
@@ -31,23 +45,15 @@ export async function getAllAttendanceLog(query = {}, limit = 0, page = 0) {
   return result || {};
 }
 
-export async function logStudentEntry(student_id) {
-  // NOTE: GET COOLDOWN
-  const last_log = await getAttendanceLog(student_id);
-  if (isWithinCooldown(last_log)) {
-    return { ignored: true };
-  }
-
-  // NOTE: GET ATTENDANCE LOG
-  const type = getNextAttendanceType(last_log);
-  const log = await addAttendanceLog(student_id, type);
-
-  return { ignored: false, log };
+/* <--- HELPERS ---> */
+function isSameDay(date) {
+  const date2 = new Date();
+  return (
+    date.getFullYear() === date2.getFullYear() &&
+    date.getMonth() === date2.getMonth() &&
+    date.getDate() === date2.getDate()
+  );
 }
-
-/* <--- HELPERS ---> 
-  NOTE: Utilities for attendance services.
-*/
 
 function isWithinCooldown(lastLog) {
   const TAP_COOLDOWN_MS = 3 * 1000; // NOTE: 5 seconds.
@@ -58,6 +64,7 @@ function isWithinCooldown(lastLog) {
 
 function getNextAttendanceType(lastLog) {
   if (!lastLog) return 'entry';
-
+  const lastLogDay = new Date(lastLog.createdAt);
+  if (!isSameDay(lastLogDay)) return 'entry';
   return lastLog.type === 'entry' ? 'exit' : 'entry';
 }
