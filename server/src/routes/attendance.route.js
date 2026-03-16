@@ -1,13 +1,19 @@
 import express from 'express';
 import {
-  EntryLog,
-  EntryLogByStudentID,
-  GetAttendanceLog,
-} from '../controllers/attendance.controller.js';
+  logExitAndEntry,
+  getAttendanceLog,
+} from '#controllers/attendance.controller.js';
+import { requireUserSession } from '#middlewares/auth-handler.js';
 
 const router = express.Router();
 
-router.route('/attendance').get(GetAttendanceLog).post(EntryLog);
-router.route('/attendance/:student_id').post(EntryLogByStudentID);
+router
+  .route('/attendance/:student_id')
+  .get(requireUserSession, getAttendanceLog)
+  .post(logExitAndEntry);
+router
+  .route('/attendance')
+  .get(requireUserSession, getAttendanceLog)
+  .post(logExitAndEntry);
 
 export default router;
