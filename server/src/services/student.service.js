@@ -32,27 +32,13 @@ export async function addStudent(student_data) {
 export async function getStudent(identifier) {
   const query = mongoose.Types.ObjectId.isValid(identifier)
     ? { _id: identifier }
-    : { student_id: identifier };
+    : identifier;
 
-  const student = await Student.findOne(query)
-    .select('-createdAt -updatedAt -__v')
-    .lean();
+  const student = await Student.findOne(query).select('-updatedAt -__v').lean();
 
   return student || null;
 }
 
-export async function getStudentByCardId(card_id) {
-  const student = await Student.findOne({ card_id }).select(
-    '-guardian -updatedAt -__v'
-  );
-  return student || null;
-}
-export async function getStudentByStudentId(student_id) {
-  const student = await Student.findOne({ student_id }).select(
-    '-guardian -updatedAt -__v'
-  );
-  return student || null;
-}
 export async function getStudents() {
   const students = await Student.find({}).select('-updatedAt -__v');
   return students;
