@@ -1,12 +1,9 @@
 import { useEffect, } from "react"
-
-
 import { useAppDispatch, useAppSelector } from "@/hooks/reduxHooks";
-
-import { Chart, Overview, QuickAccess, StudentTable } from "@/features/dashboard";
-import { fetchStudents } from "@/features/students_list";
-import { fetchAttendanceLog } from "@/features/attendance";
-import { getHourlyChartData } from "@/features/dashboard/utils/getHourlyChartData";
+import { Chart, Overview, QuickAccess, StudentTable } from "@/features/Dashboard";
+import { fetchStudents } from "@/features/StudentsLog";
+import { fetchAttendanceLog } from "@/features/AttendanceLog";
+import { getHourlyChartData } from "@/features/Dashboard/utils/getHourlyChartData";
 
 
 export default function Dashboard() {
@@ -17,13 +14,10 @@ export default function Dashboard() {
 
     useEffect(() => {
         if (students.length == 0 && !studentRequestSent) dispatch(fetchStudents())
-        // console.log(students)
     }, [dispatch, students, studentRequestSent])
 
     useEffect(() => {
-        // if (attendanceLog.length == 0 && !attendanceRequestSent)
         dispatch(fetchAttendanceLog({ filter: "today" }))
-        // console.log(attendanceLog)
     }, [dispatch])
 
 
@@ -36,15 +30,15 @@ export default function Dashboard() {
                 <h1 className="text-2xl font-bold text-slate-800">Dashboard</h1>
                 <p className="text-sm text-slate-500">Realtime Students Monitoring</p>
             </div>
-            {/* <--- Components ---> */}            {/* <--- Components ---> */}
-            <Overview totalStudents={students.length} entry={exitToday} exit={entryToday} totalTaps={exitToday + entryToday} />
+            {/* <--- Components ---> */}
+            <Overview attendanceLog={attendanceLog} totalStudents={students.length} entry={entryToday} exit={exitToday} />
             <QuickAccess />
 
             <div className=" bg-white p-5 rounded-xl shadow-md">
                 <div className="items-start gap-10 grid grid-cols-1 lg:grid-cols-[1.2fr_1fr]">
                     {/* <--- Components ---> */}
                     <Chart chartData={getHourlyChartData(attendanceLog)} />
-                    <StudentTable />
+                    <StudentTable attendanceLog={attendanceLog} />
                 </div>
             </div>
         </main >
