@@ -77,7 +77,6 @@ const studentSlice = createSlice({
       })
       .addCase(updateStudent.fulfilled, (state, action) => {
         toast.success('Student update success');
-        console.log(action.payload);
         state.students = state.students.map((student) =>
           student._id === action.payload._id ? action.payload : student,
         );

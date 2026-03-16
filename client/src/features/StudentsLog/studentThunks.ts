@@ -37,9 +37,7 @@ export const addStudent = createAsyncThunk<
         formData.append(key, val);
       } else if (typeof val === 'string') {
         formData.append(key, val);
-        console.log(key, val);
       } else if (val) {
-        console.log(key, val);
         formData.append(key, JSON.stringify(val));
       }
     });
@@ -68,6 +66,11 @@ export const updateStudent = createAsyncThunk<
     finger_id: string;
     education: StudentProps['education'];
     display_photo?: File | null | string;
+    guardian?: {
+      email?: string;
+      phone_number?: string;
+      notification?: string;
+    };
   }
 >('student/updateStudent', async (credentials, thunkAPI) => {
   try {
@@ -92,11 +95,21 @@ export const updateStudent = createAsyncThunk<
     //   _id,
     // );
 
+    const formData = new FormData();
+    Object.entries(credentials).forEach(([key, val]) => {
+      if (val instanceof File) {
+        formData.append(key, val);
+      } else if (typeof val === 'string') {
+        formData.append(key, val);
+      } else if (val) {
+        formData.append(key, JSON.stringify(val));
+      }
+    });
+
     const { data } = await api.post<StudentProps>(
       `/api/student/${credentials._id}`,
-      credentials,
+      formData,
     );
-
     return data;
   } catch (err) {
     const error = err as AxiosError<{ error: { message: string } }>;
