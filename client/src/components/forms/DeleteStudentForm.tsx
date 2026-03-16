@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { deleteStudent } from "@/features/StudentsLog";
 import { useAppDispatch } from "@/hooks/reduxHooks";
 import { useState, type Dispatch, type SetStateAction } from "react";
-import { deleteStudent } from "../../studentThunks";
 
 interface FormProps {
     setOpen: Dispatch<SetStateAction<boolean>>,
