@@ -1,5 +1,5 @@
-import { fetchStudents } from "@/features/students_list";
-import StudentTable from "@/features/students_list/components/StudentTable";
+import { fetchStudents } from "@/features/StudentsLog";
+import StudentTable from "@/features/StudentsLog/components/StudentTable";
 import { useAppDispatch, useAppSelector } from "@/hooks/reduxHooks";
 import { useEffect, } from "react";
 

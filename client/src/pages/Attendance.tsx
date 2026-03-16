@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { nextPage, previousPage } from "@/features/attendance";
-import { setPage } from "@/features/attendance/attendanceSlice";
-import AttendanceList from "@/features/attendance/components/AttendanceList";
+import { nextPage, previousPage } from "@/features/AttendanceLog";
+import { setPage } from "@/features/AttendanceLog/attendanceSlice";
+import AttendanceList from "@/features/AttendanceLog/components/AttendanceList";
 import { useAppDispatch, useAppSelector, } from "@/hooks/reduxHooks";
 
 export default function Attendance() {

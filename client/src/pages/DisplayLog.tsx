@@ -1,14 +1,14 @@
 import bg from "@/assets/Letran Clock-in.png"
 import { useSocket } from "@/hooks/useSocket";
 import { useEffect, useState } from "react"
-import { CardID, StatusIndicator } from "@/features/display_log";
+import { CardID, StatusIndicator } from "@/features/DisplayLog";
 import type { AttendanceProps, } from "@/lib/types";
 import { backendUrl } from "@/lib/api";
 import { Login, PersonSearch } from "@mui/icons-material";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useAppDispatch } from "@/hooks/reduxHooks";
-import { AttendanceLog } from "@/features/attendance/attendanceThunks";
+import { AttendanceLog } from "@/features/AttendanceLog/attendanceThunks";
 
 
 
@@ -101,9 +101,10 @@ export default function DisplayLog() {
             </div>
             {/* CARD */}
             <div className="2xl:px-0 md:px-5 w-full flex justify-center items-center gap-10">
-                {log ? <h1 className={`${log.type == "entry" ? "text-green-400 bg-green-100" : "bg-red-100 text-red-400"} z-20 p-3 text-7xl uppercase tracking-widest`}>{log.type == "entry" ? "Welcome" : "Goodbye"}</h1> : null}
-                {log ? <CardID student_id={(log?.student.student_id || "N/A")} type={log?.type} program={log?.student.education.program || "N/A"} display_photo={typeof log?.student.display_photo == "string" ? `${backendUrl}/display_photo/${log?.student.display_photo}` : `https://avatar.oxro.io/avatar.svg?name=${log.student.first_name}+${log.student.last_name}&background=ff6b6b&caps=3`} /> : null}
-                {log ? <h1 className={`${log.type == "entry" ? "text-green-400 bg-green-100" : "bg-red-100 text-red-400"} z-20 p-3 text-7xl uppercase tracking-widest`}>Student</h1> : null}
+                {log && !log.student._id ? <span className="bg-red-100 text-red-400 text-7xl py-5 px-10 uppercase tracking-widest z-10 before:top-0 before:left-0 before:-z-10 before:w-full before:h-full before:bg-black before:opacity-75 before:absolute ">Denied Entry</span> : null}
+                {log && log.student._id ? <h1 className={`${log.type == "entry" ? "text-green-400 bg-green-100" : "bg-red-100 text-red-400"} z-20 p-3 text-7xl uppercase tracking-widest`}>{log.type == "entry" ? "Welcome" : "Goodbye"}</h1> : null}
+                {log && log.student._id ? <CardID student_id={(log?.student.student_id || "N/A")} type={log?.type} program={log?.student.education.program || "N/A"} display_photo={typeof log?.student.display_photo == "string" ? `${backendUrl}/display_photo/${log?.student.display_photo}` : `https://avatar.oxro.io/avatar.svg?name=${log.student.first_name}+${log.student.last_name}&background=ff6b6b&caps=3`} /> : null}
+                {log && log.student._id ? <h1 className={`${log.type == "entry" ? "text-green-400 bg-green-100" : "bg-red-100 text-red-400"} z-20 p-3 text-7xl uppercase tracking-widest`}>Student</h1> : null}
             </div>
         </div>
     )

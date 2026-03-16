@@ -3,7 +3,7 @@ import { NavLink, type NavLinkProps } from 'react-router-dom';
 import logo from "@/assets/clock-in.webp"
 import { cn } from '@/lib/utils';
 import { useAppDispatch, useAppSelector } from '@/hooks/reduxHooks';
-import { logoutUserThunk } from '@/features/authentication/userThunks';
+import { logoutUserThunk } from '@/features/Authentication/userThunks';
 
 export default function Sidebar() {
 
