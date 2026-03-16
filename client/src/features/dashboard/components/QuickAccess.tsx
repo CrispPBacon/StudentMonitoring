@@ -6,13 +6,24 @@ import { useState } from "react"
 
 import { DialogClose } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input";
-import ButtonDialog from "@/features/dashboard/components/ButtonDialog";
+import ButtonDialog from "@/features/Dashboard/components/ButtonDialog";
 
-import AddStudentForm from "./forms/AddStudentForm";
+import AddStudentForm from "@/components/forms/AddStudentForm";
+import { backendUrl } from "@/lib/api";
 
 export default function QuickAccess() {
     const [openAddStudentForm, setOpenAddStudentForm] = useState(false);
+    const handleDownload = () => {
+        const url = `${backendUrl}/download-excel`; // your Express endpoint
 
+        // Create a temporary anchor element
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'report.xlsx'; // optional, the filename to save as
+        document.body.appendChild(link);
+        link.click(); // simulate click
+        document.body.removeChild(link); // clean up
+    };
     return (
         <div className="mb-1 bg-white p-5 rounded-xl shadow-md">
             <strong>Quick Access</strong>
@@ -51,7 +62,7 @@ export default function QuickAccess() {
                     <ShowChartRounded />
                     <span> View Report </span>
                 </button>
-                <button onClick={() => toast.info("Export Logs")}
+                <button onClick={handleDownload}
                     className="hover:bg-slate-800 bg-slate-200 text-slate-800 hover:text-slate-50 font-medium py-5 px-4 sm:px-5 rounded-md flex items-center gap-3"
                 >
                     <ImportExportRounded />
