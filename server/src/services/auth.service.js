@@ -1,30 +1,81 @@
 import mongoose from 'mongoose';
-import User from '../models/user.model.js';
-import { NotFoundError, UnauthorizedError } from '../utils/errors.js';
+import User from '#models/user.model.js';
+import {
+  ConflictError,
+  NotFoundError,
+  UnauthorizedError,
+} from '#utils/errors.js';
+import { toTitleCase } from '#utils/format.js';
 
-/* <--- LOGIN USER ---> 
-    NOTE: LOGIN THE USER TO THEIR ACCOUNT
-*/
+/* -<--- USER SERVICES FUNCTIONS --->- */
+// NOTE: LOGIN THE USER TO THEIR ACCOUNT
 export async function login(email, password) {
   if (!email) throw NotFoundError('Please enter your username');
   if (!password) throw NotFoundError('Please enter your password');
-
-  const user_data = await getUserByEmail(email);
-
-  if (!user_data) throw NotFoundError('User not found');
-  if (user_data.password !== password)
+  await assertUser({ email });
+  const user = await getUser({ email });
+  if (!user) throw NotFoundError('User not found');
+  if (user.password !== password)
     throw new UnauthorizedError('Incorrect Password');
 
-  delete user_data.password;
-  return user_data;
+  delete user.password;
+  return user;
 }
 
-/* <--- CREATE USER ---> 
-    NOTE: Create a user account.
-*/
-export async function addUser(user) {
-  const { username, first_name, last_name, email, password } = user;
-  const user_data = new User({
+export async function signup(user) {
+  const { first_name, last_name, username, email, password } = user || {};
+  await assertFieldAvailable({ username });
+  await assertFieldAvailable({ email });
+
+  console.log('HERE', Object.keys(user));
+  for (const key of Object.keys(user)) {
+    const value = user[key];
+    if (!value) {
+      const field_name = toTitleCase(key.replaceAll('_', ' '));
+      throw new NotFoundError(`${toTitleCase(field_name)} is required!`);
+    }
+  }
+
+  const newUser = await addUser({
+    first_name,
+    last_name,
+    username,
+    email,
+    password,
+  });
+  return newUser;
+}
+
+/* -<--- END SERVICES --->- */
+
+/* -<--- SERVICE VALIDATION --->- */
+// NOTE: Ascertain if user exists.
+export async function assertUser(query) {
+  if (typeof query !== 'object')
+    throw new TypeError('Query must be a non-null object');
+  const user = await getUser(query);
+  if (!user) throw new NotFoundError('User does not exist');
+  return true;
+}
+
+// NOTE: Ascertain field is available and no user uses it.
+export async function assertFieldAvailable(query) {
+  if (typeof query !== 'object')
+    throw new TypeError('Query must be a non-null object');
+
+  const user = await getUser(query);
+  const field = Object.keys(query)[0];
+  if (user) throw new ConflictError(`${toTitleCase(field)} is not available`);
+  return true;
+}
+
+/* -<--- END OF SERVICE VALIDATION --->- */
+
+/* -<--- USER RESPOSITORY FUNCTIONS --->- */
+// NOTE: Create a user account.
+export async function addUser(userData) {
+  const { username, first_name, last_name, email, password } = userData;
+  const user = new User({
     first_name,
     last_name,
     username,
@@ -32,45 +83,35 @@ export async function addUser(user) {
     password,
   });
 
-  await user_data.save();
-  const user_data_object = user_data.toObject();
-  delete user_data_object.password;
-  return user_data_object;
+  await user.save();
+  const userObject = user.toObject();
+  delete userObject.password;
+  return userObject;
 }
 
 export async function updateUser(user_id) {
   return user_id;
 }
 
-/* <--- GET USER INFORMATION ---> 
-    NOTE: Fetch User Information From the Database.
-*/
+// NOTE: Fetch User Information From the Database.
 export async function getUser(identifier) {
   const query = mongoose.Types.ObjectId.isValid(identifier)
     ? { _id: identifier }
-    : { username: identifier };
+    : identifier;
 
-  const user_data = await User.findOne(query)
+  const user = await User.findOne(query)
     .select('-createdAt -updatedAt -__v')
     .lean();
 
-  return user_data || null;
+  return user || null;
 }
 
-export async function getUserByEmail(email) {
-  const user_data = await User.findOne({ email })
-    .select('-createdAt -updatedAt -__v')
-    .lean();
-
-  return user_data || null;
-}
-
-/* <--- CHECK LOGIN ---> 
-    NOTE: Checks if session exist and valid, then return user data.
-*/
+// NOTE: Checks if session exist and valid, then return user data.
 export async function getUserBySession(session) {
   if (!session || !session.user_id) return null;
-  const user_data = getUser(session.user_id);
-  delete user_data?.password;
-  return user_data || null;
+  const user = getUser(session.user_id);
+  delete user?.password;
+  return user || null;
 }
+
+/* -<--- END RESPOSITORY --->- */
