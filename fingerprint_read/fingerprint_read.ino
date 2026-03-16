@@ -1,5 +1,4 @@
 #include <Adafruit_Fingerprint.h>
-#include <HardwareSerial.h>
 
 #define FP_RX 13
 #define FP_TX 14
@@ -7,79 +6,69 @@
 HardwareSerial mySerial(2);
 Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
 
-void setup()
-{
+uint8_t id;
+
+void setup() {
   Serial.begin(115200);
   delay(1000);
 
-  Serial.println("\nAS608 Multi Enrollment (ESP32)");
+  mySerial.begin(57600, SERIAL_8N1, FP_RX, FP_TX);
 
-  mySerial.begin(19200, SERIAL_8N1, FP_RX, FP_TX);
-  finger.begin(19200);
+  finger.begin(57600);
 
   if (finger.verifyPassword()) {
-    Serial.println("Sensor found!");
+    Serial.println("AS608 Fingerprint sensor found!");
   } else {
     Serial.println("Sensor not found :(");
     while (1);
   }
 }
 
-void loop()
-{
+void loop() {
   Serial.println("\nEnter ID (1-127) to enroll:");
-  
   while (!Serial.available());
-  uint8_t id = Serial.parseInt();
+  id = Serial.parseInt();
 
   if (id == 0) {
-    Serial.println("Invalid ID!");
+    Serial.println("Invalid ID");
     return;
   }
 
   Serial.print("Enrolling ID #");
   Serial.println(id);
 
-  enrollFingerprint(id);
+  while (! enrollFingerprint(id) );
+
+  Serial.println("Enrollment complete!");
+  delay(2000);
 }
 
 uint8_t enrollFingerprint(uint8_t id) {
-
   int p = -1;
 
   Serial.println("Place finger...");
-  while ((p = finger.getImage()) != FINGERPRINT_OK) {
-    delay(50);
+  while (p != FINGERPRINT_OK) {
+    p = finger.getImage();
   }
 
-  if (finger.image2Tz(1) != FINGERPRINT_OK) {
-    Serial.println("Error first image");
-    return p;
-  }
+  p = finger.image2Tz(1);
+  if (p != FINGERPRINT_OK) return false;
 
   Serial.println("Remove finger...");
-  delay(2500);
+  delay(2000);
+  while (finger.getImage() != FINGERPRINT_NOFINGER);
 
-  Serial.println("Place SAME finger again...");
-  while ((p = finger.getImage()) != FINGERPRINT_OK) {
-    delay(50);
-  }
+  Serial.println("Place same finger again...");
+  while (finger.getImage() != FINGERPRINT_OK);
 
-  if (finger.image2Tz(2) != FINGERPRINT_OK) {
-    Serial.println("Error second image");
-    return p;
-  }
+  p = finger.image2Tz(2);
+  if (p != FINGERPRINT_OK) return false;
 
-  if (finger.createModel() != FINGERPRINT_OK) {
-    Serial.println("Fingerprints did not match");
-    return p;
-  }
+  p = finger.createModel();
+  if (p != FINGERPRINT_OK) return false;
 
-  if (finger.storeModel(id) == FINGERPRINT_OK) {
-    Serial.println("Stored successfully!");
-  } else {
-    Serial.println("Error storing fingerprint");
-  }
+  p = finger.storeModel(id);
+  if (p != FINGERPRINT_OK) return false;
 
-  return p;
+  return true;
 }
