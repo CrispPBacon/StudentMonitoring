@@ -8,7 +8,7 @@ import { DialogClose } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input";
 
 import { useAppDispatch } from "@/hooks/reduxHooks";
-import { addStudent } from "@/features/students_list";
+import { addStudent } from "@/features/StudentsLog";
 import type { StudentProps } from "@/lib/types";
 
 
