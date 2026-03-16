@@ -13,8 +13,6 @@ export const fetchAttendanceLog = createAsyncThunk<
 >('student/fetchAttendanceLog', async (credentials, thunkAPI) => {
   try {
     const { filter, page, limit } = credentials || {};
-
-    // QUERY VALIDATIOn
     let query = '';
     if (page && filter) query = `?filter=${filter}&page=${page}`;
     else if (filter) query = `?filter=${filter}`;
@@ -22,8 +20,6 @@ export const fetchAttendanceLog = createAsyncThunk<
     const endpoint = `/api/attendance${query}`;
 
     const { data } = await api.get<attendanceQuery>(endpoint);
-
-    console.log(data);
 
     return data;
   } catch (err) {
@@ -40,12 +36,9 @@ export const AttendanceLog = createAsyncThunk<
   { student_id: string } | undefined
 >('student/AttendanceLog', async (credentials, thunkAPI) => {
   try {
-    // QUERY VALIDATIOn
     const student_id = credentials?.student_id;
     const endpoint = `/api/attendance/${student_id}`;
     const { data } = await api.post<AttendanceProps>(endpoint);
-
-    console.log(data);
 
     return data;
   } catch (err) {

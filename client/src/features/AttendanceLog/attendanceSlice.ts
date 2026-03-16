@@ -1,7 +1,7 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { AttendanceLog, fetchAttendanceLog } from './attendanceThunks';
 import type { AttendanceProps, ErrorProps } from '@/lib/types';
-import { getAttendanceToday } from '../dashboard/utils/getAttendanceToday';
+import { getAttendanceToday } from '../Dashboard/utils/getAttendanceToday';
 
 interface AttendanceState {
   attendanceLog: AttendanceProps[];
@@ -40,6 +40,9 @@ const attendanceLogSlice = createSlice({
       if (state.page === state.pageCount) return;
       state.page += 1;
     },
+    setPage: (state, action: PayloadAction<number>) => {
+      state.page = action.payload;
+    },
     previousPage: (state) => {
       if (state.page == 1) return;
       state.page -= 1;
@@ -55,14 +58,6 @@ const attendanceLogSlice = createSlice({
       })
       .addCase(fetchAttendanceLog.fulfilled, (state, action) => {
         const newLog = action.payload?.attendance || [];
-        // console.log(newLog);
-        // const log = [
-        //   ...state.attendanceLog,
-        //   ...newLog.filter(
-        //     (item) =>
-        //       !state.attendanceLog.some((exist) => exist._id === item._id),
-        //   ),
-        // ];
         state.attendanceLog = [...newLog];
         state.isLoading = false;
         state.isRequestSent = true;
@@ -76,8 +71,6 @@ const attendanceLogSlice = createSlice({
         state.isRequestSent = true;
         state.error = action.payload as ErrorProps;
       })
-
-      // MANUAL ATTENDANCE LOGGING
       .addCase(AttendanceLog.pending, (state) => {
         state.isLoading = true;
         state.isRequestSent = false;
@@ -97,7 +90,7 @@ const attendanceLogSlice = createSlice({
   },
 });
 
-export const { addAttendanceLog, nextPage, previousPage } =
+export const { addAttendanceLog, nextPage, setPage, previousPage } =
   attendanceLogSlice.actions;
 
 export default attendanceLogSlice.reducer;
