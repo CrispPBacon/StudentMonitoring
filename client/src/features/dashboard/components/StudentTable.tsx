@@ -1,10 +1,12 @@
-import { useAppSelector } from "@/hooks/reduxHooks"
-import { formatPHDate } from "@/utils/formatDate"
-import { toTitleCase } from "@/utils/formatString";
-import { Circle, LoginOutlined, LogoutOutlined } from "@mui/icons-material";
+import type { AttendanceProps } from "@/lib/types";
+import { Circle, } from "@mui/icons-material";
+import { StudentData } from "./StudentData";
+import { useSocket } from "@/hooks/useSocket";
 
-export default function StudentTable() {
-    const { attendanceLog } = useAppSelector(state => state.attendanceLog)
+
+interface StudentTableProps { attendanceLog: AttendanceProps[] }
+export default function StudentTable({ attendanceLog }: StudentTableProps) {
+    const { connected } = useSocket();
 
     const latestFive = [...attendanceLog]
         .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
@@ -16,7 +18,7 @@ export default function StudentTable() {
             <span className="flex items-center justify-between gap-4">
                 <h1 className="text-2xl font-bold text-slate-800">Campus Activity Log</h1>
                 <span className="text-sm text-slate-500 bg-green-100 py-2 px-3 rounded-2xl">
-                    <Circle style={{ fontSize: '.5rem' }} className="text-green-400 mr-1" />
+                    <Circle style={{ fontSize: '.5rem' }} className={`${connected ? "text-green-400" : "text-red-400"} mr-1`} />
                     <span>Live Monitoring</span>
                 </span>
             </span>
@@ -29,39 +31,6 @@ export default function StudentTable() {
                 }) : null}
 
             </div>
-        </div>
-    )
-}
-
-interface StudentDataProps {
-    student_id: string
-    first_name: string
-    last_name: string
-    createdAt: string
-    type: string
-}
-export function StudentData(student: StudentDataProps) {
-    const { student_id, first_name, last_name, createdAt, type } = student || {}
-    const { hour, minute, unit } = formatPHDate(createdAt)
-    return (
-        <div className="flex items-center justify-between p-5 hover:bg-slate-50 animate-entry">
-            <div className="flex items-center gap-4">
-                <div className={`w-10 h-10 flex items-center justify-center rounded-full ${type == "exit" ? "bg-red-100 text-red-600" : "bg-emerald-100 text-emerald-600"} font-bold`}>
-                    {type == 'entry' ? <LoginOutlined /> : <LogoutOutlined />}
-                </div>
-                <div>
-                    <p className="font-semibold text-slate-800">
-                        {`${toTitleCase(`${first_name} ${last_name}`)}`}
-                    </p>
-                    <p className="text-sm text-slate-500">
-                        {type == "entry" ? "Entered the campus" : "Left the campus"}
-                    </p>
-                </div>
-            </div>
-            <span className="text-sm text-slate-400">
-                <h6>{student_id}</h6>
-                <h6>Today • {`${hour}:${minute} ${unit}`}</h6>
-            </span>
         </div>
     )
 }
