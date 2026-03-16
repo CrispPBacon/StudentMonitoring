@@ -10,3 +10,13 @@ process.env.SESSION_SECRET = process.env.SESSION_SECRET || 'mern';
 process.env.DATABASE_URL =
   process.env.DATABASE_URL || 'mongodb://127.0.0.1:27017/';
 process.env.DATABASE_NAME = process.env.DATABASE_NAME || 'student-clock-in';
+
+// NOTE: EMAIL Default
+
+process.env.EMAIL_HOST = process.env.EMAIL_HOST || 'smtp.gmail.com';
+process.env.EMAIL_PORT = process.env.EMAIL_PORT || 587;
+process.env.EMAIL_USER = process.env.EMAIL_USER || '';
+process.env.EMAIL_PASS = process.env.EMAIL_PASS || '';
+
+// NOTE: SMS Default
+process.env.SMS_API_TOKEN = process.env.SMS_API_TOKEN || '';
