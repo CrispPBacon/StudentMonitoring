@@ -1,5 +1,5 @@
 import LetranBG from '@/assets/LetranBG.png'
-import { DisplayCover, LoginForm } from "@/features/authentication";
+import { DisplayCover, LoginForm } from "@/features/Authentication";
 export default function Login() {
 
 
